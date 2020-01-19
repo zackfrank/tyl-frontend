@@ -64,8 +64,9 @@ export default {
 
 <style lang=scss scoped>
 section {
-  float: right;
-  width: 81%;
+  float: left;
+  width: 60%;
+  margin-left: 8px;
 }
 
 .selectedTags {

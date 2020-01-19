@@ -54,10 +54,10 @@ export default {
 
 <style lang=scss scoped>
 section {
-  float: right;
-  display: inline-block;
+  float: left;
   margin-top: 15px;
-  width: 81%;
+  margin-left: 8px;
+  width: 62%;
 }
 
 .card {

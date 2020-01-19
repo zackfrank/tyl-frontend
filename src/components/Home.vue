@@ -2,6 +2,7 @@
 import SearchBar from './SearchBar'
 import CardList from './CardList'
 import TagList from './TagList'
+import ManageBar from './ManageBar'
 import { mapActions } from 'vuex'
 
 export default {
@@ -16,7 +17,8 @@ export default {
   components: {
     SearchBar,
     TagList,
-    CardList
+    CardList,
+    ManageBar
   },
   methods: {
     ...mapActions(['setTags', 'setCards'])
@@ -27,6 +29,7 @@ export default {
 <template>
   <main>
     <SearchBar/>
+    <ManageBar/>
     <TagList/>
     <CardList/>
   </main>
