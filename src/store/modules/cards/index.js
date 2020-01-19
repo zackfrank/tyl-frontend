@@ -20,17 +20,12 @@ const mutations = {
     state.selectedCards = cards
   },
   sortCardsByCreatedAt(state) {
-    let startingOrder = state.selectedCards.slice(0)
     state.selectedCards.sort((a, b) => a.created_at - b.created_at)
-    if (state.selectedCards[0] === startingOrder[0]) { state.selectedCards.reverse() }
   },
   sortCardsByUpdatedAt(state) {
-    let startingOrder = state.selectedCards.slice(0)
     state.selectedCards.sort((a, b) => a.updated_at - b.updated_at)
-    if (state.selectedCards[0] === startingOrder[0]) { state.selectedCards.reverse() }
   },
   sortCardsByTitle(state) {
-    let startingOrder = state.selectedCards.slice(0)
     state.selectedCards.sort((a, b) => {
       let title1 = a.title.toUpperCase()
       let title2 = b.title.toUpperCase()
@@ -38,7 +33,9 @@ const mutations = {
       if (title1 > title2) { return 1 }
       return 0;
     })
-    if (state.selectedCards[0] === startingOrder[0]) { state.selectedCards.reverse() }
+  },
+  reverseSelectedCards(state) {
+    state.selectedCards.reverse()
   }
 }
 
@@ -57,14 +54,27 @@ const actions = {
       commit('selectCards', [])
     }
   },
-  sortCardsByCreatedAt({ commit }) {
+  sortCardsByCreatedAt({ dispatch, commit }) {
+    let beforeOrder = state.selectedCards.slice(0)
     commit('sortCardsByCreatedAt')
+    dispatch('reverseSelectedCardsIfSame', beforeOrder)
   },
-  sortCardsByUpdatedAt({ commit }) {
+  sortCardsByUpdatedAt({ dispatch, commit }) {
+    let beforeOrder = state.selectedCards.slice(0)
     commit('sortCardsByUpdatedAt')
+    dispatch('reverseSelectedCardsIfSame', beforeOrder)
   },
-  sortCardsByTitle({ commit }) {
+  sortCardsByTitle({ dispatch, commit, state }) {
+    let beforeOrder = state.selectedCards.slice(0)
     commit('sortCardsByTitle')
+    dispatch('reverseSelectedCardsIfSame', beforeOrder)
+  },
+  reverseSelectedCardsIfSame({ commit, state }, beforeOrder) {
+    let analysis = []
+    for (let i = 0; i < beforeOrder.length; i++) {
+      analysis.push(beforeOrder[i] === state.selectedCards[i])
+    }
+    if(!analysis.includes(false)) { commit('reverseSelectedCards') }
   }
 }
 
