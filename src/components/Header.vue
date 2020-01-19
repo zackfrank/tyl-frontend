@@ -9,12 +9,6 @@ export default {
     goHome () {
       this.$router.push('/')
     },
-    goToInbox () {
-      this.$router.push('/inbox')
-    },
-    goToManage () {
-      this.$router.push('/manage')
-    },
     signOut () {
       this.$router.push('/login')
     }
@@ -33,10 +27,6 @@ export default {
     <!-- Nav Menu -->
     <nav id="navMenu">
       <ul>
-        <li><a @click="goHome">Home</a></li>
-        <li><a>Add Card</a></li>
-        <li><a @click="goToInbox">Inbox<span v-if="inbox.length > 0">({{ inbox.length }})</span></a></li>
-        <li><a @click="goToManage">Manage</a></li>
         <li><a @click="signOut">Sign Out</a></li>
       </ul>
     </nav>

@@ -50,7 +50,7 @@ export default {
   </section>
 </template>
 
-<style scoped>
+<style lang=scss scoped>
 section {
   float: right;
   width: 81%;
@@ -75,13 +75,11 @@ section {
   padding-left: 6px;
   padding-right: 6px;
   cursor: pointer;
-}
-
-.tagPills:hover > #remove {
-  opacity: 1;
-}
-
-.tagPills:hover {
-  opacity: 0.6;
+  &:hover > #remove {
+    opacity: 1;
+  }
+  &:hover {
+    opacity: 0.6;
+  }
 }
 </style>

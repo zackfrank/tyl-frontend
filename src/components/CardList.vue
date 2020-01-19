@@ -1,16 +1,25 @@
 <script>
-import Card from './Card'
+import CardModal from './CardModal'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  data() {
+    return {
+      showModal: false
+    }
+  },
   computed: {
     ...mapGetters(['selectedTags', 'cards', 'selectedCards']),
   },
   components: {
-    Card
+    CardModal
   },
   methods: {
-    ...mapActions(['setSelectedCards'])
+    ...mapActions(['setSelectedCards', 'setCurrentCard']),
+    manageCard(card) {
+      this.setCurrentCard(card)
+      this.showModal = true
+    }
   },
   watch: {
     selectedTags(tags) {
@@ -22,14 +31,24 @@ export default {
 
 <template>
   <section>
+
+    <!-- Cards -->
     <div 
       v-for="card in selectedCards"
       :key="card.id"
       class="card"
+      @click="manageCard(card)"
     >
       {{ card.title }}
     </div>
-    <Card/>
+
+    <!-- Card Modal -->
+    <CardModal
+      v-if="showModal"
+      @close="showModal = false"
+    >
+    </CardModal>
+
   </section>
 </template>
 

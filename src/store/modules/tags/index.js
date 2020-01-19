@@ -9,7 +9,13 @@ const getters = {
     return state.tags
   },
   availableTags (state) {
-    return state.availableTags
+    return state.availableTags.sort((a, b) => {
+      let name1 = a.name.toUpperCase()
+      let name2 = b.name.toUpperCase()
+      if (name1 < name2) { return -1 }
+      if (name1 > name2) { return 1 }
+      return 0;
+    })
   },
   selectedTags (state) {
     return state.selectedTags
@@ -19,7 +25,7 @@ const getters = {
 const mutations = {
   setTags(state, tags) {
     state.tags = tags
-    state.availableTags = tags
+    state.availableTags = tags.slice(0)
   },
   selectTag(state, tag) {
     state.selectedTags.unshift(tag)
@@ -30,6 +36,10 @@ const mutations = {
     let index = state.selectedTags.indexOf(tag)
     state.selectedTags.splice(index, 1)
     state.availableTags.push(tag)
+  },
+  resetSelectedTags(state) {
+    state.selectedTags = []
+    state.availableTags = state.tags.slice(0)
   }
 }
 
@@ -42,6 +52,9 @@ const actions = {
   },
   removeTag({ commit }, tag) {
     commit('removeTag', tag)
+  },
+  resetSelectedTags({ commit }) {
+    commit('resetSelectedTags')
   }
 }
 

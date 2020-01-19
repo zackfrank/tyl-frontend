@@ -1,6 +1,7 @@
 const state = {
   cards: [],
-  selectedCards: []
+  selectedCards: [],
+  currentCard: {}
 }
 
 const getters = {
@@ -9,6 +10,9 @@ const getters = {
   },
   selectedCards (state) {
     return state.selectedCards
+  },
+  currentCard (state) {
+    return state.currentCard
   }
 }
 
@@ -18,6 +22,11 @@ const mutations = {
   },
   selectCards(state, cards) {
     state.selectedCards = cards
+  },
+  updateCurrentCard(state) {
+    if (state.currentCard !== {}) {
+      state.currentCard = state.cards.find(card => card.id === state.currentCard.id)
+    }
   },
   sortCardsByCreatedAt(state) {
     state.selectedCards.sort((a, b) => a.created_at - b.created_at)
@@ -36,23 +45,30 @@ const mutations = {
   },
   reverseSelectedCards(state) {
     state.selectedCards.reverse()
+  },
+  setCurrentCard(state, card) {
+    state.currentCard = card
   }
 }
 
 const actions = {
   setCards({ commit }, cards) {
     commit('setCards', cards)
+    commit('updateCurrentCard')
   },
   setSelectedCards({ commit, state }, selectedTags) {
     if (selectedTags.length) {
       commit('selectCards', state.cards.filter(
-        card => selectedTags.every(
-          tag => card.tags.includes(tag.name)
+        card => selectedTags.map(tag => tag.id).every(
+          id => card.tags.map(tag => tag.id).includes(id)
         )
       )
     )} else {
       commit('selectCards', [])
     }
+  },
+  setSelectedCardsToSearchResults({ commit }, searchResults) {
+    commit('selectCards', searchResults)
   },
   sortCardsByCreatedAt({ dispatch, commit }) {
     let beforeOrder = state.selectedCards.slice(0)
@@ -75,6 +91,9 @@ const actions = {
       analysis.push(beforeOrder[i] === state.selectedCards[i])
     }
     if(!analysis.includes(false)) { commit('reverseSelectedCards') }
+  },
+  setCurrentCard({ commit }, card) {
+    commit('setCurrentCard', card)
   }
 }
 
