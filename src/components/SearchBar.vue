@@ -2,11 +2,33 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  data() {
+    return {
+      query: ''
+    }
+  },
   computed: {
     ...mapGetters(['selectedCards'])
   },
   methods: {
-    ...mapActions(['sortCardsByCreatedAt', 'sortCardsByUpdatedAt', 'sortCardsByTitle'])
+    ...mapActions([
+      'sortCardsByCreatedAt',
+      'sortCardsByUpdatedAt',
+      'sortCardsByTitle',
+      'setSelectedCardsToSearchResults',
+      'resetSelectedTags'
+    ]),
+    searchCards() {
+      if (this.query) {
+        this.resetSelectedTags()
+        let params = { params: { query: this.query }}
+        this.axios.get(`http://localhost:3000/cards/`, params).then(
+          response => this.setSelectedCardsToSearchResults(response.data)
+        )
+      } else {
+        this.setSelectedCardsToSearchResults([])
+      }
+    }
   }
 }
 </script>
@@ -18,9 +40,10 @@ export default {
         type="text" 
         id="searchInput" 
         placeholder="Search Cards..."
-        autocomplete="off" 
+        autocomplete="off"
+        v-model="query"
+        @input="searchCards"
       >
-      <button id="searchButton">Search</button>
     </div>
     <div id="sort-section" v-if="selectedCards.length">
       Sort By:
@@ -54,20 +77,8 @@ section {
   margin: 1px;
   outline: none;
   margin-left: 10px;
-  width: 68%;
+  width: 90%;
   font-size: 16px;
-}
-
-#searchButton {
-  border: none;
-  outline: none;
-  color: grey;
-  font-size: 14px;
-  transition: 0.2s;
-  cursor: pointer;
-  &:hover {
-    color: black;
-  }
 }
 
 #sort-section {
