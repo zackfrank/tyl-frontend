@@ -18,6 +18,27 @@ const mutations = {
   },
   selectCards(state, cards) {
     state.selectedCards = cards
+  },
+  sortCardsByCreatedAt(state) {
+    let startingOrder = state.selectedCards.slice(0)
+    state.selectedCards.sort((a, b) => a.created_at - b.created_at)
+    if (state.selectedCards[0] === startingOrder[0]) { state.selectedCards.reverse() }
+  },
+  sortCardsByUpdatedAt(state) {
+    let startingOrder = state.selectedCards.slice(0)
+    state.selectedCards.sort((a, b) => a.updated_at - b.updated_at)
+    if (state.selectedCards[0] === startingOrder[0]) { state.selectedCards.reverse() }
+  },
+  sortCardsByTitle(state) {
+    let startingOrder = state.selectedCards.slice(0)
+    state.selectedCards.sort((a, b) => {
+      let title1 = a.title.toUpperCase()
+      let title2 = b.title.toUpperCase()
+      if (title1 < title2) { return -1 }
+      if (title1 > title2) { return 1 }
+      return 0;
+    })
+    if (state.selectedCards[0] === startingOrder[0]) { state.selectedCards.reverse() }
   }
 }
 
@@ -35,6 +56,15 @@ const actions = {
     )} else {
       commit('selectCards', [])
     }
+  },
+  sortCardsByCreatedAt({ commit }) {
+    commit('sortCardsByCreatedAt')
+  },
+  sortCardsByUpdatedAt({ commit }) {
+    commit('sortCardsByUpdatedAt')
+  },
+  sortCardsByTitle({ commit }) {
+    commit('sortCardsByTitle')
   }
 }
 

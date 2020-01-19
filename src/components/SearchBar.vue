@@ -1,9 +1,12 @@
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   computed: {
     ...mapGetters(['selectedCards'])
+  },
+  methods: {
+    ...mapActions(['sortCardsByCreatedAt', 'sortCardsByUpdatedAt', 'sortCardsByTitle'])
   }
 }
 </script>
@@ -22,9 +25,9 @@ export default {
     <div id="sort-section" v-if="selectedCards.length">
       Sort By:
       <div class="sort-options">
-        <div class="option">Date Created</div>
-        <div class="option">Date Updated</div>
-        <div class="option">Title</div>
+        <div class="option" @click="sortCardsByTitle()">Title</div>
+        <div class="option" @click="sortCardsByCreatedAt()">Date Created</div>
+        <div class="option" @click="sortCardsByUpdatedAt()">Date Updated</div>
       </div>
     </div>
   </section>
