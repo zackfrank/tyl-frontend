@@ -22,7 +22,7 @@ const mutations = {
     state.availableTags = tags
   },
   selectTag(state, tag) {
-    state.selectedTags.push(tag)
+    state.selectedTags.unshift(tag)
     let index = state.availableTags.indexOf(tag)
     state.availableTags.splice(index, 1)
   },
