@@ -74,7 +74,7 @@ export default {
               class="tags"
               @click="addOrRemoveTagFromCard(tag)"
             >
-              {{ tag.name }}
+              #{{ tag.name }}
               <span id='remove'>x</span>
             </div>
           </div>
