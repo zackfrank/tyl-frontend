@@ -1,5 +1,11 @@
 <script>
-export default { }
+import { mapGetters } from 'vuex'
+
+export default {
+  computed: {
+    ...mapGetters(['selectedCards'])
+  }
+}
 </script>
 
 <template>
@@ -13,7 +19,7 @@ export default { }
       >
       <button id="searchButton">Search</button>
     </div>
-    <div id="sort-section">
+    <div id="sort-section" v-if="selectedCards.length">
       Sort By:
       <div class="sort-options">
         <div class="option">Date Created</div>

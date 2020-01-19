@@ -1,24 +1,21 @@
 <script>
 import Card from './Card'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['selectedTags', 'cards']),
-    selectedCards () {
-      if (this.selectedTags.length) {
-        return this.cards.filter(
-          card => this.selectedTags.every(
-            tag => card.tags.includes(tag.name)
-          )
-        )
-      } else {
-        return []
-      }
-    }
+    ...mapGetters(['selectedTags', 'cards', 'selectedCards']),
   },
   components: {
     Card
+  },
+  methods: {
+    ...mapActions(['setSelectedCards'])
+  },
+  watch: {
+    selectedTags(tags) {
+      this.setSelectedCards(tags)
+    }
   }
 }
 </script>
