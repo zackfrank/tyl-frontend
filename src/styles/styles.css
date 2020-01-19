@@ -1,0 +1,27 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 30px;
+  margin-top: 80px;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+select {
+  display: inline-block;
+  height: 35px;
+  width: 170px;
+  font-size: 16px;
+  outline: none;
+  border: 1px solid black;
+  background: none;
+  opacity: 0.5;
+  transition: 0.2s;
+  cursor: pointer;
+
+}
+
+select:hover {
+  opacity: 1;
+}
