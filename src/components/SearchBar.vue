@@ -8,14 +8,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['selectedCards'])
+    ...mapGetters(['selectedCards', 'cards'])
   },
   methods: {
     ...mapActions([
       'sortCardsByCreatedAt',
       'sortCardsByUpdatedAt',
       'sortCardsByTitle',
-      'setSelectedCardsToSearchResults',
+      'setSelectedCardsTo',
       'resetSelectedTags'
     ]),
     searchCards() {
@@ -23,11 +23,19 @@ export default {
         this.resetSelectedTags()
         let params = { params: { query: this.query }}
         this.axios.get(`http://localhost:3000/cards/`, params).then(
-          response => this.setSelectedCardsToSearchResults(response.data)
+          response => this.setSelectedCardsTo(response.data)
         )
       } else {
-        this.setSelectedCardsToSearchResults([])
+        this.clearCards()
       }
+    },
+    showAllCards() {
+      this.setSelectedCardsTo(this.cards)
+    },
+    clearCards() {
+      this.query = ''
+      this.resetSelectedTags()
+      this.setSelectedCardsTo([])
     }
   }
 }
@@ -45,6 +53,13 @@ export default {
         @input="searchCards"
       >
     </div>
+
+    <!-- Main Show Options -->
+    <div class="show-options-container">
+      <div class="show-options" @click="showAllCards">Show All Cards</div>
+      <div class="show-options" @click="clearCards">Clear Cards</div>
+    </div>
+
     <div id="sort-section" v-if="selectedCards.length">
       Sort By:
       <div class="sort-options">

@@ -2,29 +2,17 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  created() {
-    this.selectAllValue = Math.random().toString(36).substring(7);
-    this.clearAllValue = Math.random().toString(36).substring(7);
-  },
   computed: {
     ...mapGetters(['availableTags', 'selectedTags'])
   },
   data () {
     return {
-      tagToAdd: '',
-      selectAllValue: '',
-      clearAllValue: ''
+      tagToAdd: ''
     }
   },
   watch: {
     tagToAdd(value) {
-      if (value === this.selectAllValue) {
-        while (this.availableTags.length > 0) {
-          this.selectTag(this.availableTags[0])
-        }
-      } else if (value === this.clearAllValue) {
-        this.resetSelectedTags()
-      } else if (!this.selectedTags.includes(value) && value !== '') {
+      if (!this.selectedTags.includes(value) && value !== '') {
         this.selectTag(value)
       }
       this.tagToAdd = '' ;
@@ -40,8 +28,6 @@ export default {
   <section>
     <select v-model="tagToAdd">
       <option disabled value="">Select a Tag...</option>
-      <option :value="selectAllValue" v-if="availableTags.length">-Select All-</option>
-      <option :value="clearAllValue" v-if="selectedTags.length">-Clear All-</option>
       <option
         v-for="tag in availableTags"
         :key="tag.id"
@@ -58,6 +44,11 @@ export default {
         #{{ tag.name }} 
         <span id='remove'>x</span>
       </div>
+    </div>
+
+    <!-- Main Show Options -->
+    <div class="show-options-container" v-if="selectedTags[0]">
+      <div class="show-options" @click="resetSelectedTags">Clear Tags</div>
     </div>
   </section>
 </template>

@@ -45,3 +45,19 @@ select:hover {
 .clickable {
   cursor: pointer;
 }
+
+.show-options-container {
+  margin-top: 3px;
+  font-size: 12px;
+  color: #42b983;
+}
+
+.show-options {
+  display: inline-block;
+  margin-right: 15px;
+  cursor: pointer;
+  opacity: 0.7;
+  &:hover {
+    opacity: 1;
+  }
+}

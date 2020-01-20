@@ -15,7 +15,7 @@ export default {
     CardModal
   },
   methods: {
-    ...mapActions(['setSelectedCards', 'setCurrentCard']),
+    ...mapActions(['setSelectedCardsFromTags', 'setCurrentCard', 'resetSelectedTags']),
     manageCard(card) {
       this.setCurrentCard(card)
       this.showCardModal = true
@@ -27,11 +27,11 @@ export default {
   },
   watch: {
     selectedTags(tags) {
-      this.setSelectedCards(tags)
+      this.setSelectedCardsFromTags(tags)
     },
     // Render new cards on the fly as they are created if selected tag is added to new card
     cards() {
-      this.setSelectedCards(this.selectedTags)
+      this.setSelectedCardsFromTags(this.selectedTags)
     }
   }
 }
@@ -39,7 +39,6 @@ export default {
 
 <template>
   <section>
-
     <!-- Cards -->
     <div class="card-container">
       <div

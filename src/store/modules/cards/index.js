@@ -59,7 +59,7 @@ const actions = {
     commit('setCards', cards)
     commit('updateCurrentCard')
   },
-  setSelectedCards({ commit, state }, selectedTags) {
+  setSelectedCardsFromTags({ commit, state }, selectedTags) {
     if (selectedTags.length) {
       commit('selectCards', state.cards.filter(
         card => selectedTags.map(tag => tag.id).every(
@@ -70,8 +70,8 @@ const actions = {
       commit('selectCards', [])
     }
   },
-  setSelectedCardsToSearchResults({ commit }, searchResults) {
-    commit('selectCards', searchResults)
+  setSelectedCardsTo({ commit }, cards) {
+    commit('selectCards', cards)
   },
   sortCardsByCreatedAt({ dispatch, commit }) {
     let beforeOrder = state.selectedCards.slice(0)
