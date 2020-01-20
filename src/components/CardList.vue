@@ -28,6 +28,10 @@ export default {
   watch: {
     selectedTags(tags) {
       this.setSelectedCards(tags)
+    },
+    // Render new cards on the fly as they are created if selected tag is added to new card
+    cards() {
+      this.setSelectedCards(this.selectedTags)
     }
   }
 }
@@ -37,22 +41,23 @@ export default {
   <section>
 
     <!-- Cards -->
-    <div 
-      v-for="card in selectedCards"
-      :key="card.id"
-      class="card"
-      @click="manageCard(card)"
-    >
-      {{ card.title }}
+    <div class="card-container">
+      <div
+        v-for="card in selectedCards"
+        :key="card.id"
+        class="card"
+        @click="manageCard(card)"
+      >
+        {{ card.title }}
+      </div>
+
+      <!-- Card Modal -->
+      <CardModal
+        v-if="showCardModal"
+        @close="closeCardModal"
+      >
+      </CardModal>
     </div>
-
-    <!-- Card Modal -->
-    <CardModal
-      v-if="showCardModal"
-      @close="closeCardModal"
-    >
-    </CardModal>
-
   </section>
 </template>
 

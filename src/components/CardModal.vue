@@ -16,7 +16,9 @@ export default {
   },
   data() {
     return {
-      tagToAdd: ''
+      tagToAdd: '',
+      showEditDescriptionBox: false,
+      description: ''
     }
   },
   watch: {
@@ -30,13 +32,26 @@ export default {
   methods: {
     ...mapActions(['setCards']),
     addOrRemoveTagFromCard(tag) {
-      let params = { tag: tag }
-      this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`, params).then(
-        response => { this.setCards(response.data) }
-      )
+      this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
+        { tag: tag }).then(
+          response => this.setCards(response.data)
+        )
+    },
+    addDescription() {
+      if (this.description) {
+        this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
+          { description: this.description.trim() }).then(
+            response => {
+              this.setCards(response.data)
+              this.showEditDescriptionBox = false
+              this.description = ''
+            }
+          )
+      }
     },
     editDescription() {
-
+      this.description = this.currentCard.description
+      this.showEditDescriptionBox = true
     }
   }
 }
@@ -58,11 +73,23 @@ export default {
             <div
               v-if="!currentCard.description"
               class="clickable edit-description"
-              @click="editDescription"
+              @click="showEditDescriptionBox = !showEditDescriptionBox"
             >
               Add a description
             </div>
-            {{ currentCard.description }}
+            <textarea
+              rows="4"
+              v-model="description"
+              v-if="showEditDescriptionBox"
+              @keyup.enter="addDescription()"
+            >
+            </textarea>
+            <span
+              @click="editDescription"
+              v-if="!showEditDescriptionBox"
+            >
+              {{ currentCard.description }}
+            </span>
           </div>
 
           <!-- Tag Section -->
@@ -216,5 +243,12 @@ hr {
     opacity: 1;
   }
   width: 130px;
+  margin-bottom: 4px;
+}
+
+textarea {
+  padding: 5px;
+  font-size: 16px;
+  width: 90%;
 }
 </style>

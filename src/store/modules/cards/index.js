@@ -48,6 +48,9 @@ const mutations = {
   },
   setCurrentCard(state, card) {
     state.currentCard = card
+  },
+  addNewCard(state, card) {
+    state.cards.push(card)
   }
 }
 
@@ -94,6 +97,9 @@ const actions = {
   },
   setCurrentCard({ commit }, card) {
     commit('setCurrentCard', card)
+  },
+  addNewCard({ commit }, card) {
+    commit('addNewCard', card)
   }
 }
 

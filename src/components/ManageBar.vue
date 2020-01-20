@@ -29,13 +29,16 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setCurrentCard']),
+    ...mapActions(['setCurrentCard', 'addNewCard']),
     createCard() {
       if (this.newCardTitle) {
         this.axios.post('http://localhost:3000/cards', {title: this.newCardTitle}).then(
           response => {
             this.setCurrentCard(response.data)
+            this.addNewCard(response.data)
             this.showCreateCardModal = true
+            this.newCardTitle = ''
+            this.displayAddCard = false
           }
         )
       }
@@ -57,6 +60,9 @@ export default {
       <option value="displayAddCard">Add New Card</option>
       <option value="displayAddTag">Add New Tag</option>
     </select>
+    <div class="feedback">
+      <div v-if="cardAdded">New card added!</div>
+    </div>
 
     <!-- Add Card -->
     <div class="addCard" v-if="displayAddCard">
@@ -69,9 +75,6 @@ export default {
           placeholder="Card Title..."
           autocomplete="off"
         >
-      </div>
-      <div class="feedback">
-        <div v-if="cardAdded">New card added!</div>
       </div>
     </div>
 
@@ -106,7 +109,7 @@ select {
 }
 
 .feedback {
-  margin-top: 5px;
+  margin: 5px 0px 0px 8px;
   color: #42b983;
 }
 </style>
