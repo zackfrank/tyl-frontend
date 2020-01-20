@@ -63,9 +63,9 @@ export default {
 
 <template>
   <transition name="modal">
-    <div class="modal-mask">
+    <div class="modal-mask" @click="close">
       <div class="modal-wrapper">
-        <div class="modal-container">
+        <div class="modal-container" @click.stop>
           
           <!-- Title -->
           <div class="modal-title">
