@@ -5,7 +5,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      showModal: false
+      showCardModal: false
     }
   },
   computed: {
@@ -18,7 +18,11 @@ export default {
     ...mapActions(['setSelectedCards', 'setCurrentCard']),
     manageCard(card) {
       this.setCurrentCard(card)
-      this.showModal = true
+      this.showCardModal = true
+    },
+    closeCardModal() {
+      this.showCardModal = false
+      this.setCurrentCard({})
     }
   },
   watch: {
@@ -44,8 +48,8 @@ export default {
 
     <!-- Card Modal -->
     <CardModal
-      v-if="showModal"
-      @close="showModal = false"
+      v-if="showCardModal"
+      @close="closeCardModal"
     >
     </CardModal>
 

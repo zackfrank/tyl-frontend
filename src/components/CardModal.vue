@@ -34,6 +34,9 @@ export default {
       this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`, params).then(
         response => { this.setCards(response.data) }
       )
+    },
+    editDescription() {
+
     }
   }
 }
@@ -52,6 +55,13 @@ export default {
 
           <!-- Description -->
           <div class="modal-description">
+            <div
+              v-if="!currentCard.description"
+              class="clickable edit-description"
+              @click="editDescription"
+            >
+              Add a description
+            </div>
             {{ currentCard.description }}
           </div>
 
@@ -198,5 +208,13 @@ hr {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+.edit-description {
+  opacity: 0.6;
+  &:hover {
+    opacity: 1;
+  }
+  width: 130px;
 }
 </style>

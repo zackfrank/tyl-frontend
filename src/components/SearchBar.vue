@@ -35,10 +35,10 @@ export default {
 
 <template>
   <section>
-    <div class="search">
+    <div class="inputWrapper">
       <input 
         type="text" 
-        id="searchInput" 
+        class="tylInput"
         placeholder="Search Cards..."
         autocomplete="off"
         v-model="query"
@@ -62,23 +62,6 @@ section {
   float: left;
   border-right: 1px solid grey;
   height: 80vh;
-}
-
-.search {
-  border: solid 1px grey;
-  height: 35px;
-  width: 95%;
-  border-radius: 3px;
-}
-
-#searchInput {
-  border: none;
-  height: 85%;
-  margin: 1px;
-  outline: none;
-  margin-left: 10px;
-  width: 90%;
-  font-size: 16px;
 }
 
 #sort-section {
