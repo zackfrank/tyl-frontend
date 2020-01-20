@@ -21,7 +21,7 @@ export default {
       description: '',
       showEditTitleBox: false,
       title: '',
-      feedback: false
+      tagFeedback: false
     }
   },
   watch: {
@@ -53,7 +53,7 @@ export default {
         { tag: tag }).then(
           response => {
             this.setCards(response.data)
-            this.feedback = false
+            this.tagFeedback = false
           }
         )
     },
@@ -81,7 +81,7 @@ export default {
       this.showEditTitleBox = true
     },
     addTitle() {
-      if (this.title) {
+      if (this.title.trim()) {
         this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
           { title: this.title.trim() }).then(
             response => {
@@ -93,15 +93,21 @@ export default {
       }
     },
     save() {
-      this.addDescription()
-      this.addTitle()
+      if (this.description !== this.currentCard.description) {
+        this.addDescription()
+      }
+      if (this.title.trim() !== this.currentCard.title) {
+        this.addTitle()
+      }
+      this.showEditTitleBox = false
+      this.showEditDescriptionBox = false
     },
     close() {
-      this.addDescription()
-      if (this.currentCard.tags[0]) {
+      this.save()
+      if (this.currentCard.tags[0] && this.currentCard.title) {
         this.$emit('close')
-      } else {
-        this.feedback = true
+      } else if (!this.currentCard.tags[0]) {
+        this.tagFeedback = true
       }
     }
   }
@@ -181,7 +187,12 @@ export default {
               #{{ tag.name }}
               <span id="remove">x</span>
             </div>
-            <span id="feedback" v-if="feedback">-- ADD AT LEAST ONE TAG --</span>
+            <span
+              class="feedback"
+              v-if="tagFeedback"
+            >
+              -- ADD AT LEAST ONE TAG --
+            </span>
           </div>
           
           <!-- Close Button -->
@@ -274,7 +285,7 @@ hr {
   }
 }
 
-#feedback {
+.feedback {
   color: #e44d2e;
   display: block;
   text-align: center;
