@@ -52,6 +52,10 @@ export default {
     editDescription() {
       this.description = this.currentCard.description
       this.showEditDescriptionBox = true
+    },
+    close() {
+      this.addDescription()
+      this.$emit('close')
     }
   }
 }
@@ -118,7 +122,7 @@ export default {
           
           <!-- Close Button -->
           <div class="modal-footer">
-            <button class="modal-default-button" @click="$emit('close')">
+            <button class="modal-default-button" @click="close">
               Close
             </button>
           </div>
