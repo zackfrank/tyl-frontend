@@ -27,6 +27,13 @@ export default {
         this.addOrRemoveTagFromCard(tag);
       }
       this.tagToAdd = '' ;
+    },
+    showEditDescriptionBox(value) {
+      if (value) {
+        this.$nextTick(() =>
+          this.$refs.description.focus()
+        )
+      }
     }
   },
   methods: {
@@ -48,6 +55,9 @@ export default {
             }
           )
       }
+    },
+    toggleEditDescription() {
+      this.showEditDescriptionBox = !this.showEditDescriptionBox
     },
     editDescription() {
       this.description = this.currentCard.description
@@ -77,13 +87,14 @@ export default {
             <div
               v-if="!currentCard.description"
               class="clickable edit-description"
-              @click="showEditDescriptionBox = !showEditDescriptionBox"
+              @click="toggleEditDescription"
             >
               Add a description
             </div>
             <textarea
               rows="4"
               v-model="description"
+              ref="description"
               v-if="showEditDescriptionBox"
               @keyup.enter="addDescription()"
             >

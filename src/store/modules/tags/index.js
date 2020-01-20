@@ -40,6 +40,10 @@ const mutations = {
   resetSelectedTags(state) {
     state.selectedTags = []
     state.availableTags = state.tags.slice(0)
+  },
+  addNewTag(state, tag) {
+    state.tags.push(tag)
+    state.availableTags.push(tag)
   }
 }
 
@@ -55,6 +59,9 @@ const actions = {
   },
   resetSelectedTags({ commit }) {
     commit('resetSelectedTags')
+  },
+  addNewTag({ commit }, tag) {
+    commit('addNewTag', tag)
   }
 }
 

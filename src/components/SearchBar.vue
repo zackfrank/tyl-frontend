@@ -43,7 +43,7 @@ export default {
 
 <template>
   <section>
-    <div class="inputWrapper">
+    <div class="input-wrapper">
       <input 
         type="text" 
         class="tylInput"

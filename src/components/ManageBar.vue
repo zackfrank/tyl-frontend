@@ -8,37 +8,35 @@ export default {
   },
   data() {
     return {
-      manageOption: '',
-      displayAddCard: false,
-      displayAddTag: false,
       showCreateCardModal: false,
       newCardTitle: '',
-      cardAdded: false
-    }
-  },
-  watch: {
-    manageOption(value) {
-      if (value === "displayAddCard") {
-        this.displayAddCard = true
-        this.displayAddTag = false
-      } else if (value === "displayAddTag") {
-        this.displayAddCard = false
-        this.displayAddTag = true
-      }
-      this.manageOption = ''
+      newTagName: '',
+      cardAdded: false,
+      tagAdded: false
     }
   },
   methods: {
-    ...mapActions(['setCurrentCard', 'addNewCard']),
+    ...mapActions(['setCurrentCard', 'addNewCard', 'addNewTag']),
     createCard() {
       if (this.newCardTitle) {
-        this.axios.post('http://localhost:3000/cards', {title: this.newCardTitle}).then(
+        this.axios.post('http://localhost:3000/cards', { title: this.newCardTitle }).then(
           response => {
             this.setCurrentCard(response.data)
             this.addNewCard(response.data)
             this.showCreateCardModal = true
             this.newCardTitle = ''
-            this.displayAddCard = false
+          }
+        )
+      }
+    },
+    createTag() {
+      if (this.newTagName) {
+        this.axios.post('http://localhost:3000/tags', { name: this.newTagName }).then(
+          response => {
+            this.addNewTag(response.data)
+            this.newTagName = ''
+            this.tagAdded = true
+            setTimeout(() => this.tagAdded = false, 5000)
           }
         )
       }
@@ -55,30 +53,40 @@ export default {
 
 <template>
   <section>
-    <select v-model="manageOption">
-      <option disabled value="">Manage...</option>
-      <option value="displayAddCard">Add New Card</option>
-      <option value="displayAddTag">Add New Tag</option>
-    </select>
-    <div class="feedback">
-      <div v-if="cardAdded">New card added!</div>
-    </div>
-
     <!-- Add Card -->
-    <div class="addCard" v-if="displayAddCard">
-      <div class="inputWrapper">
+    <div class="add-card">
+      <div class="input-wrapper">
         <input
           type="text"
           class="tylInput"
           v-model="newCardTitle"
           @keyup.enter="createCard"
-          placeholder="Card Title..."
+          placeholder="New Card Title..."
           autocomplete="off"
         >
       </div>
     </div>
+    <div class="feedback">
+      <div v-if="cardAdded">New card added!</div>
+    </div>
 
-    <!-- Display Add Tag -->
+    <!-- Add Tag -->
+    <div class="add-tag">
+      <div class="input-wrapper">
+        <input
+          type="text"
+          class="tylInput"
+          v-model="newTagName"
+          @keyup.enter="createTag"
+          placeholder="New Tag Name..."
+          autocomplete="off"
+        >
+      </div>
+    </div>
+    <div class="feedback">
+      <div v-if="tagAdded">New tag added!</div>
+    </div>
+
     <CardModal
       v-if="showCreateCardModal"
       @close="closeCreateCardModal"
@@ -100,11 +108,14 @@ select {
   margin-left: 8px;
 }
 
-.addCard {
-  margin: 25px 0 0 8px;
+.add-card, .add-tag {
+  margin-left: 8px;
 }
 
-.inputWrapper {
+.add-tag {
+}
+
+.input-wrapper {
   width: 200px;
 }
 
