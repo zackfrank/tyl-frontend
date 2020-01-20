@@ -18,7 +18,8 @@ export default {
     return {
       tagToAdd: '',
       showEditDescriptionBox: false,
-      description: ''
+      description: '',
+      feedback: false
     }
   },
   watch: {
@@ -41,7 +42,10 @@ export default {
     addOrRemoveTagFromCard(tag) {
       this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
         { tag: tag }).then(
-          response => this.setCards(response.data)
+          response => {
+            this.setCards(response.data)
+            this.feedback = false
+          }
         )
     },
     addDescription() {
@@ -65,7 +69,11 @@ export default {
     },
     close() {
       this.addDescription()
-      this.$emit('close')
+      if (this.currentCard.tags[0]) {
+        this.$emit('close')
+      } else {
+        this.feedback = true
+      }
     }
   }
 }
@@ -127,8 +135,9 @@ export default {
               @click="addOrRemoveTagFromCard(tag)"
             >
               #{{ tag.name }}
-              <span id='remove'>x</span>
+              <span id="remove">x</span>
             </div>
+            <span id="feedback" v-if="feedback">-- ADD AT LEAST ONE TAG --</span>
           </div>
           
           <!-- Close Button -->
@@ -211,6 +220,13 @@ hr {
   &:hover > #remove {
     opacity: 1;
   }
+}
+
+#feedback {
+  color: #e44d2e;
+  display: block;
+  text-align: center;
+  margin-bottom: 8px;
 }
 
 .modal-footer {
