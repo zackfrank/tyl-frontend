@@ -47,12 +47,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setCards']),
+    ...mapActions(['setCurrentCard']),
     addOrRemoveTagFromCard(tag) {
       this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
         { tag: tag }).then(
           response => {
-            this.setCards(response.data)
+            this.setCurrentCard(response.data)
             this.tagFeedback = false
           }
         )
@@ -62,7 +62,7 @@ export default {
         this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
           { description: this.description.trim() }).then(
             response => {
-              this.setCards(response.data)
+              this.setCurrentCard(response.data)
               this.showEditDescriptionBox = false
               this.description = ''
             }
@@ -85,7 +85,7 @@ export default {
         this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
           { title: this.title.trim() }).then(
             response => {
-              this.setCards(response.data)
+              this.setCurrentCard(response.data)
               this.showEditTitleBox = false
               this.title = ''
             }
