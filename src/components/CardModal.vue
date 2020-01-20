@@ -19,6 +19,8 @@ export default {
       tagToAdd: '',
       showEditDescriptionBox: false,
       description: '',
+      showEditTitleBox: false,
+      title: '',
       feedback: false
     }
   },
@@ -33,6 +35,13 @@ export default {
       if (value) {
         this.$nextTick(() =>
           this.$refs.description.focus()
+        )
+      }
+    },
+    showEditTitleBox(value) {
+      if (value) {
+        this.$nextTick(() =>
+          this.$refs.title.focus()
         )
       }
     }
@@ -67,6 +76,26 @@ export default {
       this.description = this.currentCard.description
       this.showEditDescriptionBox = true
     },
+    editTitle() {
+      this.title = this.currentCard.title
+      this.showEditTitleBox = true
+    },
+    addTitle() {
+      if (this.title) {
+        this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
+          { title: this.title.trim() }).then(
+            response => {
+              this.setCards(response.data)
+              this.showEditTitleBox = false
+              this.title = ''
+            }
+          )
+      }
+    },
+    save() {
+      this.addDescription()
+      this.addTitle()
+    },
     close() {
       this.addDescription()
       if (this.currentCard.tags[0]) {
@@ -83,12 +112,26 @@ export default {
   <transition name="modal">
     <div class="modal-mask" @click="close">
       <div class="modal-wrapper">
-        <div class="modal-container" @click.stop>
+        <div class="modal-container" @click.stop="save">
           
           <!-- Title -->
           <div class="modal-title">
-            <h3>{{ currentCard.title }}</h3>
+            <h3
+              @click.stop="editTitle"
+              v-if="!showEditTitleBox"
+            >
+              {{ currentCard.title }}
+            </h3>
           </div>
+          <input
+            id="edit-title"
+            type="text"
+            v-model="title"
+            ref="title"
+            v-if="showEditTitleBox"
+            @keyup.enter="addTitle()"
+            @click.stop
+          >
 
           <!-- Description -->
           <div class="modal-description">
@@ -105,10 +148,11 @@ export default {
               ref="description"
               v-if="showEditDescriptionBox"
               @keyup.enter="addDescription()"
+              @click.stop
             >
             </textarea>
             <span
-              @click="editDescription"
+              @click.stop="editDescription"
               v-if="!showEditDescriptionBox"
             >
               {{ currentCard.description }}
@@ -182,9 +226,17 @@ export default {
   font-family: Helvetica, Arial, sans-serif;
 }
 
-.modal-title h3 {
+.modal-title h3, #edit-title {
   margin-top: 15px;
   color: #42b983;
+}
+
+#edit-title {
+  font-weight: bold;
+  border: none;
+  font-size: 1.17em;
+  width: 95%;
+  padding: 7px;
 }
 
 .modal-description {
