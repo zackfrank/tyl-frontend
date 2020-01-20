@@ -85,8 +85,8 @@ section {
 }
 
 .sort-options {
-  margin-top: 2px;
-  margin-left: 10px;
+  margin-top: 5px;
+  font-size: 14px;
 }
 
 .option {
