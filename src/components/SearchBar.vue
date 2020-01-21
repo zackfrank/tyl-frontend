@@ -57,7 +57,6 @@ export default {
     <!-- Main Show Options -->
     <div class="show-options-container">
       <div class="show-options" @click="showAllCards">Show All Cards</div>
-      <div class="show-options" @click="clearCards">Clear Cards</div>
     </div>
 
     <div id="sort-section" v-if="selectedCards.length">

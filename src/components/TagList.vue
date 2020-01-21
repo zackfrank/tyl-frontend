@@ -3,7 +3,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['availableTags', 'selectedTags'])
+    ...mapGetters(['availableTags', 'selectedTags', 'selectedCards'])
   },
   data () {
     return {
@@ -19,7 +19,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['selectTag', 'removeTag', 'resetSelectedTags'])
+    ...mapActions(['selectTag', 'removeTag', 'resetSelectedTags']),
+    clearAll() {
+      this.resetSelectedTags()
+      this.setSelectedCardsTo([])
+    }
   }
 }
 </script>
@@ -47,8 +51,8 @@ export default {
     </div>
 
     <!-- Main Show Options -->
-    <div class="show-options-container" v-if="selectedTags[0]">
-      <div class="show-options" @click="resetSelectedTags">Clear Tags</div>
+    <div class="show-options-container" v-if="selectedCards[0] || selectedTags[0]">
+      <div class="show-options" @click="clearAll">Clear All</div>
     </div>
   </section>
 </template>
