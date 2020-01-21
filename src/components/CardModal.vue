@@ -186,7 +186,7 @@ export default {
             <div
               v-if="!currentCard.description"
               class="clickable edit-description"
-              @click="toggleEditDescription"
+              @click.stop="toggleEditDescription"
             >
               Add a description
             </div>
