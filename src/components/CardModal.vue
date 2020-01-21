@@ -16,6 +16,7 @@ export default {
   },
   data() {
     return {
+      showDropDown: false,
       tagToAdd: '',
       showEditDescriptionBox: false,
       description: '',
@@ -47,26 +48,22 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setCurrentCard']),
+    ...mapActions(['setCurrentCard', 'setCards', 'getAndResetCards']),
     addOrRemoveTagFromCard(tag) {
       this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
-        { tag: tag }).then(
-          response => {
-            this.setCurrentCard(response.data)
-            this.tagFeedback = false
-          }
-        )
+        { tag: tag }).then(() => {
+          this.getAndResetCards()
+          this.tagFeedback = false
+        })
     },
     addDescription() {
       if (this.description) {
         this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
-          { description: this.description.trim() }).then(
-            response => {
-              this.setCurrentCard(response.data)
-              this.showEditDescriptionBox = false
-              this.description = ''
-            }
-          )
+          { description: this.description.trim() }).then(() => {
+            this.getAndResetCards()
+            this.showEditDescriptionBox = false
+            this.description = ''
+          })
       }
     },
     toggleEditDescription() {
@@ -83,14 +80,30 @@ export default {
     addTitle() {
       if (this.title.trim()) {
         this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
-          { title: this.title.trim() }).then(
-            response => {
-              this.setCurrentCard(response.data)
-              this.showEditTitleBox = false
-              this.title = ''
-            }
-          )
+          { title: this.title.trim() }).then(() => {
+            this.getAndResetCards()
+            this.showEditTitleBox = false
+            this.title = ''
+          })
       }
+    },
+    toggleArchived(value) {
+      this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
+        { archived: value }).then(() => {
+          this.getAndResetCards()
+        })
+    },
+    deleteCard() {
+      this.axios.delete(`http://localhost:3000/cards/${this.currentCard.id}`).then(() => {
+        this.$emit('close')
+        this.setCurrentCard({})
+        this.getAndResetCards()
+      })
+    },
+    getAndResetCards() {
+      this.axios.get('http://localhost:3000/cards').then(
+        response => this.setCards(response.data)
+      )
     },
     save() {
       if (this.description !== this.currentCard.description) {
@@ -101,6 +114,7 @@ export default {
       }
       this.showEditTitleBox = false
       this.showEditDescriptionBox = false
+      this.showDropDown = false
     },
     close() {
       this.save()
@@ -119,7 +133,35 @@ export default {
     <div class="modal-mask" @click="close">
       <div class="modal-wrapper">
         <div class="modal-container" @click.stop="save">
-          
+
+          <!-- Drop-down Menu -->
+          <div
+            @click="showDropDown = !showDropDown"
+            id="drop-down-icon"
+            @click.stop
+          >
+            <span>&#8226;&#8226;&#8226;</span>
+          </div>
+          <div
+            id="drop-down-menu"
+            v-if="showDropDown"
+            @click.stop
+          >
+            <div
+              @click="toggleArchived(!currentCard.archived)"
+              class="drop-down-option"
+            >
+              <span v-if="!currentCard.archived">Archive</span>
+              <span v-if="currentCard.archived">Un-archive</span>
+            </div>
+            <div
+              @click="deleteCard"
+              class="drop-down-option"
+            >
+              Delete
+            </div>
+          </div>
+
           <!-- Title -->
           <div class="modal-title">
             <h3
@@ -235,6 +277,41 @@ export default {
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
+}
+
+#drop-down-icon {
+  display: inline-block;
+  float: right;
+  font-size: 20px;
+  opacity: 0.6;
+  cursor: pointer;
+  margin-right: -20px;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+#drop-down-menu {
+  width: 200px;
+  padding: 8px;
+  border-radius: 4px;
+  float: right;
+  margin-top: 20px;
+  margin-right: -20px;
+  color: #606060;
+  display: inline-block;
+  z-index: 9999;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, .3);
+}
+
+.drop-down-option {
+  width: 100%;
+  opacity: 0.7;
+  cursor: pointer;
+  padding: 8px;
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .modal-title h3, #edit-title {

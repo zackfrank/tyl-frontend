@@ -5,11 +5,21 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      showCardModal: false
+      showCardModal: false,
+      showArchived: false
     }
   },
   computed: {
     ...mapGetters(['selectedTags', 'cards', 'selectedCards']),
+    filteredSelectedCards() {
+      let cards
+      if (!this.showArchived) {
+        cards = this.selectedCards.filter(card => !card.archived)
+      } else {
+        cards = this.selectedCards
+      }
+      return cards
+    }
   },
   components: {
     CardModal
@@ -42,7 +52,7 @@ export default {
     <!-- Cards -->
     <div class="card-container">
       <div
-        v-for="card in selectedCards"
+        v-for="card in filteredSelectedCards"
         :key="card.id"
         class="card"
         @click="manageCard(card)"
