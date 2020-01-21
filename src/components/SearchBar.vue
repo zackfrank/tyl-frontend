@@ -61,7 +61,7 @@ export default {
     </div>
 
     <div id="sort-section" v-if="selectedCards.length">
-      Sort By:
+      <span id="sort-by">Sort By:</span>
       <div class="sort-options">
         <div class="option" @click="sortCardsByTitle()">Title</div>
         <div class="option" @click="sortCardsByCreatedAt()">Date Created</div>
@@ -81,7 +81,11 @@ section {
 
 #sort-section {
   margin-top: 10px;
-  color: grey;
+  color: #55108B;
+}
+
+#sort-by {
+  opacity: 0.7;
 }
 
 .sort-options {
@@ -91,8 +95,9 @@ section {
 
 .option {
   cursor: pointer;
+  opacity: 0.4;
   &:hover {
-    color: black;
+    opacity: 0.7;
   }
 }
 </style>
