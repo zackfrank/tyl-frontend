@@ -8,6 +8,7 @@ const getters = {
   tags (state) {
     return state.tags
   },
+  // Tags that have not yet been "selected", sorted alphabetically
   availableTags (state) {
     return state.availableTags.sort((a, b) => {
       let name1 = a.name.toUpperCase()

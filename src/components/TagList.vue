@@ -3,7 +3,12 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['availableTags', 'selectedTags', 'selectedCards'])
+    ...mapGetters([
+      'availableTags',
+      'selectedTags',
+      'selectedCards',
+      'activeCards'
+    ])
   },
   data () {
     return {
@@ -11,18 +16,37 @@ export default {
     }
   },
   watch: {
-    tagToAdd(value) {
-      if (!this.selectedTags.includes(value) && value !== '') {
-        this.selectTag(value)
+    tagToAdd(tag) {
+      if (!this.selectedTags.includes(tag) && tag !== '') {
+        this.selectTag(tag)
       }
       this.tagToAdd = '' ;
-    }
+    },
   },
   methods: {
-    ...mapActions(['selectTag', 'removeTag', 'resetSelectedTags']),
+    ...mapActions(['selectTag', 'removeTag', 'resetSelectedTags', 'setSelectedCardsTo']),
     clearAll() {
       this.resetSelectedTags()
       this.setSelectedCardsTo([])
+    },
+    cardCount(tag) {
+      let count
+      if (!this.selectedTags[0]) {
+        // NUMBER OF CARDS WITH THIS TAG
+        return this.activeCards.filter(card => card.tags.map(tag => tag.id).includes(tag.id)).length
+      } else if (this.selectedTags.length > 0) {
+        // NUMBER OF CARDS WITH THIS TAG PLUS SELECTED TAGS
+        let selectedTagIds = this.selectedTags.map(tag => tag.id)
+        selectedTagIds.push(tag.id)
+        return this.activeCards.filter(card =>
+          selectedTagIds.every(id => card.tags.map(tag => tag.id).includes(id))).length
+      }
+
+      return count
+    },
+    // Only display tags that have associated cards
+    availableTagsWithCards() {
+      return this.availableTags.filter(tag => this.cardCount(tag))
     }
   }
 }
@@ -33,10 +57,10 @@ export default {
     <select v-model="tagToAdd">
       <option disabled value="">Select a Tag...</option>
       <option
-        v-for="tag in availableTags"
+        v-for="tag in availableTagsWithCards()"
         :key="tag.id"
         :value="tag">
-        {{ tag.name }}
+        {{ tag.name }} ({{ cardCount(tag) }})
       </option>
     </select>
 
@@ -45,7 +69,7 @@ export default {
         class="tagPills"
         @click="removeTag(tag)"
       >
-        #{{ tag.name }} 
+        #{{ tag.name }}
         <span id='remove'>x</span>
       </div>
     </div>

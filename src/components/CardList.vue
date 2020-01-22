@@ -14,6 +14,8 @@ export default {
     filteredSelectedCards() {
       let cards
       if (!this.showArchived) {
+        // FIXME: can this use the new activeCards getter?
+        //   Maybe create ActiveSelectedCards / ArchivedSelectedCards / AllSelectedCards ?
         cards = this.selectedCards.filter(card => !card.archived)
       } else {
         cards = this.selectedCards

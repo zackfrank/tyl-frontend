@@ -8,6 +8,9 @@ const getters = {
   cards (state) {
     return state.cards
   },
+  activeCards (state) {
+    return state.cards.filter(card => !card.archived)
+  },
   selectedCards (state) {
     return state.selectedCards
   },
