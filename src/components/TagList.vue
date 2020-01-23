@@ -31,10 +31,10 @@ export default {
     },
     cardCount(tag) {
       let count
-      if (!this.selectedTags[0]) {
+      if (!this.selectedTags.length) {
         // NUMBER OF CARDS WITH THIS TAG
         return this.activeCards.filter(card => card.tags.map(tag => tag.id).includes(tag.id)).length
-      } else if (this.selectedTags.length > 0) {
+      } else if (this.selectedTags.length) {
         // NUMBER OF CARDS WITH THIS TAG PLUS SELECTED TAGS
         let selectedTagIds = this.selectedTags.map(tag => tag.id)
         selectedTagIds.push(tag.id)
