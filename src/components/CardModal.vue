@@ -79,16 +79,21 @@ export default {
       this.addOrRemoveTagFromCard(tag)
       this.availableTags.push(tag)
     },
-    // Extract this and same method from ManageBar into central API
-    createTagAndAddToCard() {
+    // Extract tag creation (also in ManageBar) into central API
+    getTagFromTagNameAndAddToCard() {
       if (this.tagQuery) {
-        this.axios.post('http://localhost:3000/tags', { name: this.tagQuery }).then(
-          response => {
-            this.addNewTag(response.data)
-            this.tagQuery = ''
-            this.addTagToCard(response.data)
-          }
-        )
+        let existingTag = this.tags.find(tag => tag.name === this.tagQuery)
+        if (existingTag) {
+          this.addTagToCard(existingTag)
+        } else {
+          this.axios.post('http://localhost:3000/tags', { name: this.tagQuery }).then(
+            response => {
+              this.addNewTag(response.data)
+              this.tagQuery = ''
+              this.addTagToCard(response.data)
+            }
+          )
+        }
       }
     },
     addDescription() {
@@ -256,7 +261,7 @@ export default {
                 placeholder="Add a tag..."
                 v-model="tagQuery"
                 @click.stop="showAvailableTags"
-                @keyup.enter="createTagAndAddToCard()"
+                @keyup.enter="getTagFromTagNameAndAddToCard"
               >
             </div>
             <div
@@ -279,7 +284,7 @@ export default {
                 {{ tag.name }}
               </div>
               <div
-                @click="createTagAndAddToCard"
+                @click="getTagFromTagNameAndAddToCard"
                 class="drop-down-option"
                 v-if="!tagMatches.length"
               >
