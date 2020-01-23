@@ -22,7 +22,10 @@ export default {
       description: '',
       showEditTitleBox: false,
       title: '',
-      tagFeedback: false
+      tagFeedback: false,
+      tagQuery: '',
+      tagMatches: [],
+      showTags: false
     }
   },
   watch: {
@@ -45,26 +48,58 @@ export default {
           this.$refs.title.focus()
         )
       }
+    },
+    tagQuery(input) {
+      if (input) {
+        this.tagMatches = this.availableTags.filter(tag => 
+          tag.name.toLowerCase().includes(input.toLowerCase())
+        )
+      } else if (!input) {
+        this.tagMatches = this.availableTags
+      }
     }
   },
   methods: {
-    ...mapActions(['setCurrentCard', 'setCards', 'getAndResetCards']),
+    ...mapActions(['setCurrentCard', 'setCards', 'addNewTag']),
     addOrRemoveTagFromCard(tag) {
       this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
         { tag: tag }).then(() => {
           this.getAndResetCards()
           this.tagFeedback = false
+          this.tagQuery = ''
         })
     },
+    addTagToCard(tag) {
+      this.addOrRemoveTagFromCard(tag)
+      let index = this.availableTags.indexOf(tag)
+      this.availableTags.splice(index, 1)
+      this.tagMatches = this.availableTags
+    },
+    removeTagFromCard(tag) {
+      this.addOrRemoveTagFromCard(tag)
+      this.availableTags.push(tag)
+    },
+    // Extract this and same method from ManageBar into central API
+    createTagAndAddToCard() {
+      if (this.tagQuery) {
+        this.axios.post('http://localhost:3000/tags', { name: this.tagQuery }).then(
+          response => {
+            this.addNewTag(response.data)
+            this.tagQuery = ''
+            this.addTagToCard(response.data)
+          }
+        )
+      }
+    },
     addDescription() {
-      if (this.description) {
+      if (this.description.trim() !== this.currentCard.description) {
         this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
           { description: this.description.trim() }).then(() => {
             this.getAndResetCards()
-            this.showEditDescriptionBox = false
-            this.description = ''
           })
       }
+      this.showEditDescriptionBox = false
+      this.description = ''
     },
     toggleEditDescription() {
       this.showEditDescriptionBox = !this.showEditDescriptionBox
@@ -78,14 +113,14 @@ export default {
       this.showEditTitleBox = true
     },
     addTitle() {
-      if (this.title.trim()) {
+      if (this.title.trim() && (this.title.trim() !== this.currentCard.title)) {
         this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
           { title: this.title.trim() }).then(() => {
             this.getAndResetCards()
-            this.showEditTitleBox = false
-            this.title = ''
           })
       }
+      this.showEditTitleBox = false
+      this.title = ''
     },
     toggleArchived(value) {
       this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
@@ -105,16 +140,19 @@ export default {
         response => this.setCards(response.data)
       )
     },
+    showAvailableTags() {
+      this.tagMatches = this.availableTags
+      this.showTags = true
+    },
     save() {
-      if (this.description !== this.currentCard.description) {
+      if (this.showEditDescriptionBox) {
         this.addDescription()
       }
-      if (this.title.trim() !== this.currentCard.title) {
+      if (this.showEditTitleBox) {
         this.addTitle()
       }
-      this.showEditTitleBox = false
-      this.showEditDescriptionBox = false
       this.showDropDown = false
+      this.showTags = false
     },
     close() {
       this.save()
@@ -209,22 +247,50 @@ export default {
 
           <!-- Tag Section -->
           <div class="modal-tags">
-            <select v-model="tagToAdd">
-              <option disabled value="">Add a Tag...</option>
-              <option
-                v-for="tag in availableTags"
-                :key="tag.id"
-                :value="tag">
-                {{ tag.name }}
-              </option>
-            </select>
             <hr>
-            <h4>Tags:</h4>
+            <div class="input-wrapper" @click.stop>
+              <input
+                type="text"
+                class="tylInput"
+                id="tag-input"
+                placeholder="Add a tag..."
+                v-model="tagQuery"
+                @click.stop="showAvailableTags"
+                @keyup.enter="createTagAndAddToCard()"
+              >
+            </div>
+            <div
+              v-if="tagQuery"
+              id="create-tag-hint"
+            >
+              Enter to create/add new tag
+            </div>
+            <div
+              id="tag-drop-down-menu"
+              v-if="showTags"
+              @click.stop
+            >
+              <div
+                @click="addTagToCard(tag)"
+                class="drop-down-option"
+                v-for="tag in tagMatches"
+                :key="tag.id"
+              >
+                {{ tag.name }}
+              </div>
+              <div
+                @click="createTagAndAddToCard"
+                class="drop-down-option"
+                v-if="!tagMatches.length"
+              >
+                - Create Tag -
+              </div>
+            </div>
             <div 
               v-for="tag in currentCard.tags"
-              :key="currentCard.tags.indexOf(tag)"
+              :key="tag.id"
               class="tags"
-              @click="addOrRemoveTagFromCard(tag)"
+              @click="removeTagFromCard(tag)"
             >
               #{{ tag.name }}
               <span id="remove">x</span>
@@ -279,6 +345,12 @@ export default {
   font-family: Helvetica, Arial, sans-serif;
 }
 
+#create-tag-hint {
+  color: #55108B;
+  opacity: 0.5f;
+  font-size: 14px;
+}
+
 #drop-down-icon {
   display: inline-block;
   float: right;
@@ -291,7 +363,8 @@ export default {
   }
 }
 
-#drop-down-menu {
+#drop-down-menu, #tag-drop-down-menu {
+  background-color: white;
   width: 200px;
   padding: 8px;
   border-radius: 4px;
@@ -370,6 +443,7 @@ hr {
 }
 
 .modal-footer {
+  margin-top: 20px;
   width: 100%;
 }
 

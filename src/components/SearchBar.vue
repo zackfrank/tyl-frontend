@@ -23,7 +23,7 @@ export default {
       if (this.query) {
         this.setCardSearchQuery(this.query)
         this.resetSelectedTags()
-        let searchResults = this.cards.filter(card => 
+        let searchResults = this.cards.filter(card =>
           card.title.toLowerCase().includes(this.query.toLowerCase()) ||
           (
             card.description &&
