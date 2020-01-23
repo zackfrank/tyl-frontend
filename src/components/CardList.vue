@@ -10,7 +10,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['selectedTags', 'cards', 'selectedCards']),
+    ...mapGetters(['selectedTags', 'cards', 'selectedCards', 'cardSearchQuery']),
     filteredSelectedCards() {
       let cards
       if (!this.showArchived) {
@@ -39,7 +39,9 @@ export default {
   },
   watch: {
     selectedTags(tags) {
-      this.setSelectedCardsFromTags(tags)
+      if (!this.cardSearchQuery) {
+        this.setSelectedCardsFromTags(tags)
+      }
     },
     // Render new cards on the fly as they are created if selected tag is added to new card
     cards() {

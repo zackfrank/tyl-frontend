@@ -8,7 +8,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['selectedCards', 'cards'])
+    ...mapGetters(['selectedCards', 'cards', 'cardSearchQuery'])
   },
   methods: {
     ...mapActions([
@@ -16,17 +16,24 @@ export default {
       'sortCardsByUpdatedAt',
       'sortCardsByTitle',
       'setSelectedCardsTo',
-      'resetSelectedTags'
+      'resetSelectedTags',
+      'setCardSearchQuery'
     ]),
     searchCards() {
       if (this.query) {
+        this.setCardSearchQuery(this.query)
         this.resetSelectedTags()
-        let params = { params: { query: this.query }}
-        this.axios.get(`http://localhost:3000/cards/`, params).then(
-          response => this.setSelectedCardsTo(response.data)
+        let searchResults = this.cards.filter(card => 
+          card.title.toLowerCase().includes(this.query.toLowerCase()) ||
+          (
+            card.description &&
+            card.description.toLowerCase().includes(this.query.toLowerCase())
+          )
         )
+        this.setSelectedCardsTo(searchResults)
       } else {
         this.clearCards()
+        this.setCardSearchQuery('')
       }
     },
     showAllCards() {

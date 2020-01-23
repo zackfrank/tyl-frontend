@@ -7,7 +7,7 @@ export default {
     availableTags() {
       let available = []
       this.tags.forEach(tag => {
-        if(!this.currentCard.tags.map(tag => tag.id).includes(tag.id)) {
+        if (!this.currentCard.tags.map(tag => tag.id).includes(tag.id)) {
           available.push(tag) 
         }
       })

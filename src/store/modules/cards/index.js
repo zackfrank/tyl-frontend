@@ -1,7 +1,8 @@
 const state = {
   cards: [],
   selectedCards: [],
-  currentCard: {}
+  currentCard: {},
+  cardSearchQuery: ''
 }
 
 const getters = {
@@ -16,6 +17,9 @@ const getters = {
   },
   currentCard (state) {
     return state.currentCard
+  },
+  cardSearchQuery (state) {
+    return state.cardSearchQuery
   }
 }
 
@@ -54,6 +58,9 @@ const mutations = {
   },
   addNewCard(state, card) {
     state.cards.push(card)
+  },
+  setCardSearchQuery(state, query) {
+    state.cardSearchQuery = query
   }
 }
 
@@ -103,6 +110,9 @@ const actions = {
   },
   addNewCard({ commit }, card) {
     commit('addNewCard', card)
+  },
+  setCardSearchQuery({ commit }, query) {
+    commit('setCardSearchQuery', query)
   }
 }
 
