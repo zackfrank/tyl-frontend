@@ -45,7 +45,9 @@ export default {
     },
     // Render new cards on the fly as they are created if selected tag is added to new card
     cards() {
-      this.setSelectedCardsFromTags(this.selectedTags)
+      if (this.selectedTags.length) {
+        this.setSelectedCardsFromTags(this.selectedTags)
+      }
     }
   }
 }
