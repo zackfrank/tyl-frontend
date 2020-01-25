@@ -2,7 +2,9 @@ const state = {
   cards: [],
   selectedCards: [],
   currentCard: {},
-  cardSearchQuery: ''
+  cardSearchQuery: '',
+  showArchived: false,
+  showActive: true
 }
 
 const getters = {
@@ -11,6 +13,9 @@ const getters = {
   },
   activeCards (state) {
     return state.cards.filter(card => !card.archived)
+  },
+  archivedCards (state) {
+    return state.cards.filter(card => card.archived)
   },
   selectedCards (state) {
     return state.selectedCards
@@ -61,6 +66,35 @@ const mutations = {
   },
   setCardSearchQuery(state, query) {
     state.cardSearchQuery = query
+  },
+  showArchived(state, value) {
+    state.showArchived = value
+  },
+  showActive(state, value) {
+    state.showActive = value
+  },
+  //  =======================
+  //  ======= FILTERS =======
+  //  =======================
+  //   TO BE RUN IN SEQUENCE
+  //  =======================
+  runArchivedFilter(state) {
+    if (state.showArchived) {
+      state.selectedCards.push(
+        state.cards.filter(card => card.archived)
+      )
+    } else {
+      state.selectedCards.push(
+        state.cards.filter(card => !card.archived)
+      )
+    }
+  },
+  runActiveFilter(state) {
+    if (state.showArchived && state.showActive) {
+      state.selectedCards.push(
+        state.cards.filter(card => !card.archived)
+      )
+    }
   }
 }
 
@@ -113,6 +147,17 @@ const actions = {
   },
   setCardSearchQuery({ commit }, query) {
     commit('setCardSearchQuery', query)
+  },
+  filterSelectedCards({ commit }) {
+    commit('setSelectedCardsTo', [])
+    commit('runArchivedFilter')
+    commit('runActiveFilter')
+  },
+  showArchived({ commit }, value) {
+    commit('showArchived', value)
+  },
+  showActive({ commit }, value) {
+    commit('showActive', value)
   }
 }
 

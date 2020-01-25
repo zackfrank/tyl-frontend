@@ -15,14 +15,17 @@ export default {
         this.query = ''
       }
     },
-    archivedOnly(value) {
-      if (value) {
-        this.showArchivedOnly()
+    includeArchived(value) {
+      this.showArchived(value)
+      if (!value) {
+        this.archivedOnly = false
       }
     },
-    includeArchived(value) {
+    archivedOnly(value) {
+      this.showActive(!value)
       if (value) {
-        this.includeArchivedCards()
+        this.includeArchived = true
+        this.showArchived(true)
       }
     }
   },
@@ -36,7 +39,9 @@ export default {
       'sortCardsByTitle',
       'setSelectedCardsTo',
       'resetSelectedTags',
-      'setCardSearchQuery'
+      'setCardSearchQuery',
+      'showArchived',
+      'showActive'
     ]),
     searchCards() {
       if (this.query) {
@@ -62,12 +67,6 @@ export default {
       this.query = ''
       this.resetSelectedTags()
       this.setSelectedCardsTo([])
-    },
-    showArchivedOnly() {
-
-    },
-    includeArchivedCards() {
-
     }
   }
 }
