@@ -1,6 +1,8 @@
 const state = {
   cards: [],
-  selectedCards: [],
+  selectedTagCards: [],
+  unfilteredCards: [],
+  filteredCards: [],
   currentCard: {},
   cardSearchQuery: '',
   showArchived: false,
@@ -17,14 +19,26 @@ const getters = {
   archivedCards (state) {
     return state.cards.filter(card => card.archived)
   },
-  selectedCards (state) {
-    return state.selectedCards
+  filteredCards (state) {
+    return state.filteredCards
+  },
+  unfilteredCards (state) {
+    return state.unfilteredCards
+  },
+  selectedTagCards(state) {
+    return state.selectedTagCards
   },
   currentCard (state) {
     return state.currentCard
   },
   cardSearchQuery (state) {
     return state.cardSearchQuery
+  },
+  showArchived (state) {
+    return state.showArchived
+  },
+  showActive (state) {
+    return state.setShowActive
   }
 }
 
@@ -32,8 +46,14 @@ const mutations = {
   setCards(state, cards) {
     state.cards = cards
   },
-  selectCards(state, cards) {
-    state.selectedCards = cards
+  setFilteredCards(state, cards) {
+    state.filteredCards = cards
+  },
+  setUnfilteredCards(state, cards) {
+    state.unfilteredCards = cards
+  },
+  setSelectedTagCards(state, cards) {
+    state.selectedTagCards = cards
   },
   updateCurrentCard(state) {
     if (state.currentCard !== {}) {
@@ -41,13 +61,13 @@ const mutations = {
     }
   },
   sortCardsByCreatedAt(state) {
-    state.selectedCards.sort((a, b) => a.created_at - b.created_at)
+    state.filteredCards.sort((a, b) => a.created_at - b.created_at)
   },
   sortCardsByUpdatedAt(state) {
-    state.selectedCards.sort((a, b) => a.updated_at - b.updated_at)
+    state.filteredCards.sort((a, b) => a.updated_at - b.updated_at)
   },
   sortCardsByTitle(state) {
-    state.selectedCards.sort((a, b) => {
+    state.filteredCards.sort((a, b) => {
       let title1 = a.title.toUpperCase()
       let title2 = b.title.toUpperCase()
       if (title1 < title2) { return -1 }
@@ -55,8 +75,8 @@ const mutations = {
       return 0;
     })
   },
-  reverseSelectedCards(state) {
-    state.selectedCards.reverse()
+  reverseFilteredCards(state) {
+    state.filteredCards.reverse()
   },
   setCurrentCard(state, card) {
     state.currentCard = card
@@ -80,19 +100,16 @@ const mutations = {
   //  =======================
   runArchivedFilter(state, cards) {
     if (state.showArchived) {
-      state.selectedCards = cards.filter(card => card.archived)
+      state.filteredCards.push(cards.filter(card => card.archived))
     } else {
-      state.selectedCards = cards.filter(card => !card.archived)
+      state.filteredCards.push(cards.filter(card => !card.archived))
     }
-    console.log(state.selectedCards)
   },
   runActiveFilter(state, cards) {
     if (state.showArchived && state.showActive) {
-      state.selectedCards.push(
-        cards.filter(card => !card.archived)
-      )
+      state.filteredCards.push(cards.filter(card => !card.archived))
     }
-    state.selectedCards = state.selectedCards.flat()
+    state.filteredCards = state.filteredCards.flat()
   }
 }
 
@@ -101,41 +118,39 @@ const actions = {
     commit('setCards', cards)
     commit('updateCurrentCard')
   },
-  setSelectedCardsFromTags({ dispatch, state }, selectedTags) {
+  setFilteredCardsFromTags({ dispatch, commit, state }, selectedTags) {
     if (selectedTags.length) {
-      dispatch('filterSelectedCards', state.cards.filter(
+      commit('setSelectedTagCards', state.cards.filter(
         card => selectedTags.map(tag => tag.id).every(
           id => card.tags.map(tag => tag.id).includes(id)
         )
       )
     )} else {
-      dispatch('filterSelectedCards', [])
+      commit('setSelectedTagCards', [])
     }
-  },
-  setSelectedCardsTo({ dispatch }, cards) {
-    dispatch('filterSelectedCards', cards)
+    dispatch('filterSelectedCards', state.selectedTagCards)
   },
   sortCardsByCreatedAt({ dispatch, commit }) {
-    let beforeOrder = state.selectedCards.slice(0)
+    let beforeOrder = state.filteredCards.slice(0)
     commit('sortCardsByCreatedAt')
-    dispatch('reverseSelectedCardsIfSame', beforeOrder)
+    dispatch('reverseFilteredCardsIfSame', beforeOrder)
   },
   sortCardsByUpdatedAt({ dispatch, commit }) {
-    let beforeOrder = state.selectedCards.slice(0)
+    let beforeOrder = state.filteredCards.slice(0)
     commit('sortCardsByUpdatedAt')
-    dispatch('reverseSelectedCardsIfSame', beforeOrder)
+    dispatch('reverseFilteredCardsIfSame', beforeOrder)
   },
   sortCardsByTitle({ dispatch, commit, state }) {
-    let beforeOrder = state.selectedCards.slice(0)
+    let beforeOrder = state.filteredCards.slice(0)
     commit('sortCardsByTitle')
-    dispatch('reverseSelectedCardsIfSame', beforeOrder)
+    dispatch('reverseFilteredCardsIfSame', beforeOrder)
   },
-  reverseSelectedCardsIfSame({ commit, state }, beforeOrder) {
+  reverseFilteredCardsIfSame({ commit, state }, beforeOrder) {
     let analysis = []
     for (let i = 0; i < beforeOrder.length; i++) {
-      analysis.push(beforeOrder[i] === state.selectedCards[i])
+      analysis.push(beforeOrder[i] === state.filteredCards[i])
     }
-    if(!analysis.includes(false)) { commit('reverseSelectedCards') }
+    if(!analysis.includes(false)) { commit('reverseFilteredCards') }
   },
   setCurrentCard({ commit }, card) {
     commit('setCurrentCard', card)
@@ -146,18 +161,20 @@ const actions = {
   setCardSearchQuery({ commit }, query) {
     commit('setCardSearchQuery', query)
   },
+  // call this: filterCardsFrom() ?
   filterSelectedCards({ commit }, cards) {
-    commit('selectCards', [])
+    commit('setUnfilteredCards', cards)
+    commit('setFilteredCards', [])
     commit('runArchivedFilter', cards)
     commit('runActiveFilter', cards)
   },
   setShowArchived({ commit, dispatch, state }, value) {
     commit('setShowArchived', value)
-    dispatch('filterSelectedCards', state.cards.slice(0))
+    dispatch('filterSelectedCards', state.unfilteredCards)
   },
   setShowActive({ commit, dispatch, state  }, value) {
     commit('setShowActive', value)
-    dispatch('filterSelectedCards', state.cards.slice(0))
+    dispatch('filterSelectedCards', state.unfilteredCards)
   }
 }
 

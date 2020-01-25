@@ -27,17 +27,33 @@ export default {
         this.includeArchived = true
         this.setShowArchived(true)
       }
+    },
+    showArchived(value) {
+      if (this.includeArchived !== value) {
+        this.includeArchived = value
+      }
+    },
+    showActive(value) {
+      if (this.archivedOnly === value) {
+        this.archivedOnly = !value
+      }
     }
   },
   computed: {
-    ...mapGetters(['selectedCards', 'cards', 'cardSearchQuery'])
+    ...mapGetters([
+      'cards',
+      'cardSearchQuery',
+      'unfilteredCards',
+      'showArchived',
+      'showActive'
+    ])
   },
   methods: {
     ...mapActions([
       'sortCardsByCreatedAt',
       'sortCardsByUpdatedAt',
       'sortCardsByTitle',
-      'setSelectedCardsTo',
+      'filterSelectedCards',
       'resetSelectedTags',
       'setCardSearchQuery',
       'setShowArchived',
@@ -54,19 +70,21 @@ export default {
             card.description.toLowerCase().includes(this.query.toLowerCase())
           )
         )
-        this.setSelectedCardsTo(searchResults)
+        this.filterSelectedCards(searchResults)
       } else {
         this.clearCards()
         this.setCardSearchQuery('')
       }
     },
     showAllCards() {
-      this.setSelectedCardsTo(this.cards)
+      this.filterSelectedCards(this.cards)
     },
     clearCards() {
       this.query = ''
+      this.archivedOnly = false
+      this.includeArchived = false
       this.resetSelectedTags()
-      this.setSelectedCardsTo([])
+      this.filterSelectedCards([])
     }
   }
 }
@@ -89,7 +107,7 @@ export default {
     <div class="show-options-container">
       <div class="show-options" @click="showAllCards">Show All Cards</div>
 
-      <div id="sort-section" v-if="selectedCards.length">
+      <div id="sort-section" v-if="unfilteredCards.length">
 
         <!-- Sort By -->
         <div class="sort-sub-section">
