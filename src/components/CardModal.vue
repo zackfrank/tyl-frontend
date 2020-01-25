@@ -12,6 +12,17 @@ export default {
         }
       })
       return available
+    },
+    saveAndCloseText() {
+      if (
+           (this.showEditDescriptionBox &&
+             (this.description.trim() !== (this.currentCard.description ? this.currentCard.description : ''))
+           ) ||
+           // title can not be null
+           (this.title.trim() && (this.title.trim() !== this.currentCard.title))
+         ) {
+        return 'Save & Close'
+      } else { return 'Close' }
     }
   },
   data() {
@@ -311,7 +322,7 @@ export default {
           <!-- Close Button -->
           <div class="modal-footer">
             <button class="modal-default-button" @click="close">
-              Close
+              {{ saveAndCloseText }}
             </button>
           </div>
 
