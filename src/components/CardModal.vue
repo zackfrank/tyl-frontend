@@ -93,7 +93,9 @@ export default {
     // Extract tag creation (also in ManageBar) into central API
     getTagFromTagNameAndAddToCard() {
       if (this.tagQuery) {
-        let existingTag = this.tags.find(tag => tag.name === this.tagQuery)
+        let existingTag = this.tags.find(
+          tag => tag.name.toLowerCase() === this.tagQuery.toLowerCase()
+        )
         if (existingTag) {
           this.addTagToCard(existingTag)
         } else {
