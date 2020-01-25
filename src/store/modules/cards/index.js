@@ -67,10 +67,10 @@ const mutations = {
   setCardSearchQuery(state, query) {
     state.cardSearchQuery = query
   },
-  showArchived(state, value) {
+  setShowArchived(state, value) {
     state.showArchived = value
   },
-  showActive(state, value) {
+  setShowActive(state, value) {
     state.showActive = value
   },
   //  =======================
@@ -78,23 +78,21 @@ const mutations = {
   //  =======================
   //   TO BE RUN IN SEQUENCE
   //  =======================
-  runArchivedFilter(state) {
+  runArchivedFilter(state, cards) {
     if (state.showArchived) {
-      state.selectedCards.push(
-        state.cards.filter(card => card.archived)
-      )
+      state.selectedCards = cards.filter(card => card.archived)
     } else {
-      state.selectedCards.push(
-        state.cards.filter(card => !card.archived)
-      )
+      state.selectedCards = cards.filter(card => !card.archived)
     }
+    console.log(state.selectedCards)
   },
-  runActiveFilter(state) {
+  runActiveFilter(state, cards) {
     if (state.showArchived && state.showActive) {
       state.selectedCards.push(
-        state.cards.filter(card => !card.archived)
+        cards.filter(card => !card.archived)
       )
     }
+    state.selectedCards = state.selectedCards.flat()
   }
 }
 
@@ -103,19 +101,19 @@ const actions = {
     commit('setCards', cards)
     commit('updateCurrentCard')
   },
-  setSelectedCardsFromTags({ commit, state }, selectedTags) {
+  setSelectedCardsFromTags({ dispatch, state }, selectedTags) {
     if (selectedTags.length) {
-      commit('selectCards', state.cards.filter(
+      dispatch('filterSelectedCards', state.cards.filter(
         card => selectedTags.map(tag => tag.id).every(
           id => card.tags.map(tag => tag.id).includes(id)
         )
       )
     )} else {
-      commit('selectCards', [])
+      dispatch('filterSelectedCards', [])
     }
   },
-  setSelectedCardsTo({ commit }, cards) {
-    commit('selectCards', cards)
+  setSelectedCardsTo({ dispatch }, cards) {
+    dispatch('filterSelectedCards', cards)
   },
   sortCardsByCreatedAt({ dispatch, commit }) {
     let beforeOrder = state.selectedCards.slice(0)
@@ -148,16 +146,18 @@ const actions = {
   setCardSearchQuery({ commit }, query) {
     commit('setCardSearchQuery', query)
   },
-  filterSelectedCards({ commit }) {
-    commit('setSelectedCardsTo', [])
-    commit('runArchivedFilter')
-    commit('runActiveFilter')
+  filterSelectedCards({ commit }, cards) {
+    commit('selectCards', [])
+    commit('runArchivedFilter', cards)
+    commit('runActiveFilter', cards)
   },
-  showArchived({ commit }, value) {
-    commit('showArchived', value)
+  setShowArchived({ commit, dispatch, state }, value) {
+    commit('setShowArchived', value)
+    dispatch('filterSelectedCards', state.cards.slice(0))
   },
-  showActive({ commit }, value) {
-    commit('showActive', value)
+  setShowActive({ commit, dispatch, state  }, value) {
+    commit('setShowActive', value)
+    dispatch('filterSelectedCards', state.cards.slice(0))
   }
 }
 
