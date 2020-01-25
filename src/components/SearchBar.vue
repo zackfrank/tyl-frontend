@@ -16,16 +16,16 @@ export default {
       }
     },
     includeArchived(value) {
-      this.showArchived(value)
+      this.setShowArchived(value)
       if (!value) {
         this.archivedOnly = false
       }
     },
     archivedOnly(value) {
-      this.showActive(!value)
+      this.setShowActive(!value)
       if (value) {
         this.includeArchived = true
-        this.showArchived(true)
+        this.setShowArchived(true)
       }
     }
   },
@@ -40,8 +40,8 @@ export default {
       'setSelectedCardsTo',
       'resetSelectedTags',
       'setCardSearchQuery',
-      'showArchived',
-      'showActive'
+      'setShowArchived',
+      'setShowActive'
     ]),
     searchCards() {
       if (this.query) {

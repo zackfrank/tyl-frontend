@@ -10,18 +10,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['selectedTags', 'cards', 'selectedCards', 'cardSearchQuery']),
-    filteredSelectedCards() {
-      let cards
-      if (!this.showArchived) {
-        // FIXME: can this use the new activeCards getter?
-        //   Maybe create ActiveSelectedCards / ArchivedSelectedCards / AllSelectedCards ?
-        cards = this.selectedCards.filter(card => !card.archived)
-      } else {
-        cards = this.selectedCards
-      }
-      return cards
-    }
+    ...mapGetters(['selectedTags', 'cards', 'selectedCards', 'cardSearchQuery'])
   },
   components: {
     CardModal
@@ -58,7 +47,7 @@ export default {
     <!-- Cards -->
     <div class="card-container">
       <div
-        v-for="card in filteredSelectedCards"
+        v-for="card in selectedCards"
         :key="card.id"
         class="card"
         @click="manageCard(card)"
