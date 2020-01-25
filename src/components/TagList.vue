@@ -7,7 +7,8 @@ export default {
       'availableTags',
       'selectedTags',
       'selectedCards',
-      'activeCards'
+      'activeCards',
+      'cardSearchQuery'
     ])
   },
   data () {
@@ -24,8 +25,15 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['selectTag', 'removeTag', 'resetSelectedTags', 'setSelectedCardsTo']),
+    ...mapActions([
+      'selectTag',
+      'removeTag',
+      'resetSelectedTags',
+      'setSelectedCardsTo',
+      'setCardSearchQuery'
+    ]),
     clearAll() {
+      this.setCardSearchQuery('')
       this.resetSelectedTags()
       this.setSelectedCardsTo([])
     },
@@ -75,7 +83,7 @@ export default {
     </div>
 
     <!-- Main Show Options -->
-    <div class="show-options-container" v-if="selectedCards[0] || selectedTags[0]">
+    <div class="show-options-container" v-if="selectedCards[0] || selectedTags[0] || cardSearchQuery">
       <div class="show-options" @click="clearAll">Clear All</div>
     </div>
   </section>

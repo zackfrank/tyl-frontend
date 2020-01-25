@@ -7,6 +7,13 @@ export default {
       query: ''
     }
   },
+  watch: {
+    cardSearchQuery(query) {
+      if (query === '') {
+        this.query = ''
+      }
+    }
+  },
   computed: {
     ...mapGetters(['selectedCards', 'cards', 'cardSearchQuery'])
   },
