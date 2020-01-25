@@ -99,6 +99,7 @@ section {
 
 #sort-by {
   opacity: 0.7;
+  font-size: 14px;
 }
 
 .sort-options {
