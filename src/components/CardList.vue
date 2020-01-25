@@ -10,13 +10,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['selectedTags', 'cards', 'selectedCards', 'cardSearchQuery'])
+    ...mapGetters(['selectedTags', 'cards', 'filteredCards', 'cardSearchQuery'])
   },
   components: {
     CardModal
   },
   methods: {
-    ...mapActions(['setSelectedCardsFromTags', 'setCurrentCard', 'resetSelectedTags']),
+    ...mapActions(['setFilteredCardsFromTags', 'setCurrentCard', 'resetSelectedTags']),
     manageCard(card) {
       this.setCurrentCard(card)
       this.showCardModal = true
@@ -29,13 +29,13 @@ export default {
   watch: {
     selectedTags(tags) {
       if (!this.cardSearchQuery) {
-        this.setSelectedCardsFromTags(tags)
+        this.setFilteredCardsFromTags(tags)
       }
     },
     // Render new cards on the fly as they are created if selected tag is added to new card
     cards() {
       if (this.selectedTags.length) {
-        this.setSelectedCardsFromTags(this.selectedTags)
+        this.setFilteredCardsFromTags(this.selectedTags)
       }
     }
   }
@@ -47,7 +47,7 @@ export default {
     <!-- Cards -->
     <div class="card-container">
       <div
-        v-for="card in selectedCards"
+        v-for="card in filteredCards"
         :key="card.id"
         class="card"
         @click="manageCard(card)"

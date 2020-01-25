@@ -6,7 +6,7 @@ export default {
     ...mapGetters([
       'availableTags',
       'selectedTags',
-      'selectedCards',
+      'filteredCards',
       'activeCards',
       'cardSearchQuery'
     ])
@@ -29,13 +29,17 @@ export default {
       'selectTag',
       'removeTag',
       'resetSelectedTags',
-      'setSelectedCardsTo',
-      'setCardSearchQuery'
+      'filterSelectedCards',
+      'setCardSearchQuery',
+      'setShowArchived',
+      'setShowActive'
     ]),
     clearAll() {
+      this.setShowArchived(false)
+      this.setShowActive(false)
       this.setCardSearchQuery('')
       this.resetSelectedTags()
-      this.setSelectedCardsTo([])
+      this.filterSelectedCards([])
     },
     cardCount(tag) {
       let count
@@ -83,7 +87,7 @@ export default {
     </div>
 
     <!-- Main Show Options -->
-    <div class="show-options-container" v-if="selectedCards[0] || selectedTags[0] || cardSearchQuery">
+    <div class="show-options-container" v-if="filteredCards[0] || selectedTags[0] || cardSearchQuery">
       <div class="show-options" @click="clearAll">Clear All</div>
     </div>
   </section>
