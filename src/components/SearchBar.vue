@@ -45,7 +45,8 @@ export default {
       'cardSearchQuery',
       'unfilteredCards',
       'showArchived',
-      'showActive'
+      'showActive',
+      'subtags'
     ])
   },
   methods: {
@@ -119,10 +120,12 @@ export default {
           </div>
         </div>
 
-      <!-- Show/Hide Archived -->
+        <!-- SHOW OPTIONS -->
         <div class="sort-sub-section">
           <div id="show-options-header">Show Options:</div>
-          <span class="sort-option-header">Archived Tags:</span>
+
+          <!-- Show/Hide Archived -->
+          <div class="sort-option-header">Archived Tags:</div>
           <ul class="sort-options">
             <li class="checkbox-option">
               <input type="checkbox" v-model="includeArchived" class="show-options-checkbox">
@@ -140,6 +143,26 @@ export default {
                 @click="archivedOnly = !archivedOnly"
               >
                 Archived Only
+              </label>
+            </li>
+          </ul>
+
+          <!-- Show/Hide Subtags -->
+          <div class="sort-option-header">Subtags:</div>
+          <ul class="sort-options">
+            <li
+              class="checkbox-option"
+              v-for="tag in subtags"
+              :key="tag.id"
+            >
+              <input
+                type="checkbox"
+                class="show-options-checkbox"
+              >
+              <label
+                class="checkbox-label"
+              >
+                {{ tag.name }}
               </label>
             </li>
           </ul>
@@ -170,6 +193,7 @@ section {
 .sort-option-header {
   opacity: 0.7;
   font-size: 14px;
+  margin-top: 8px;
 }
 
 #show-options-header {
@@ -177,12 +201,12 @@ section {
   font-weight: bold;
   border-top: 1px solid grey;
   padding-top: 10px;
-  margin-bottom: 8px;
 }
 
 .sort-options {
   margin-top: 5px;
   font-size: 14px;
+  margin-bottom: 14px;
 }
 
 .checkbox-option {

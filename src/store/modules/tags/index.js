@@ -1,7 +1,8 @@
 const state = {
   tags: [],
   availableTags: [],
-  selectedTags: []
+  selectedTags: [],
+  subtags: []
 }
 
 const getters = {
@@ -20,6 +21,9 @@ const getters = {
   },
   selectedTags (state) {
     return state.selectedTags
+  },
+  subtags(state) {
+    return state.subtags
   }
 }
 
@@ -45,6 +49,22 @@ const mutations = {
   addNewTag(state, tag) {
     state.tags.push(tag)
     state.availableTags.push(tag)
+  },
+  setSubTags(state, unfilteredCards) {
+    if (!state.selectedTags.length) {
+      state.subtags = state.availableTags
+    } else {
+      let subtags = []
+      unfilteredCards.forEach(card => {
+        let tags = card.tags
+        tags.forEach(tag => {
+          if (!subtags.map(tag => tag.id).includes(tag.id)) {
+            subtags.push(tag)
+          }
+        })
+      })
+      state.subtags = subtags.filter(tag => !state.selectedTags.map(tag => tag.id).includes(tag.id))
+    }
   }
 }
 
@@ -63,6 +83,9 @@ const actions = {
   },
   addNewTag({ commit }, tag) {
     commit('addNewTag', tag)
+  },
+  setSubTags({ commit }, unfilteredCards) {
+    commit('setSubTags', unfilteredCards)
   }
 }
 
