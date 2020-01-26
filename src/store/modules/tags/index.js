@@ -2,7 +2,8 @@ const state = {
   tags: [],
   availableTags: [],
   selectedTags: [],
-  subtags: []
+  subtags: [],
+  hiddenSubtags: []
 }
 
 const getters = {
@@ -24,6 +25,9 @@ const getters = {
   },
   subtags(state) {
     return state.subtags
+  },
+  hiddenSubtags(state) {
+    return state.hiddenSubtags
   }
 }
 
@@ -65,6 +69,9 @@ const mutations = {
       })
       state.subtags = subtags.filter(tag => !state.selectedTags.map(tag => tag.id).includes(tag.id))
     }
+  },
+  setHiddenSubtags(state, tags) {
+    state.hiddenSubtags = tags
   }
 }
 
@@ -86,6 +93,9 @@ const actions = {
   },
   setSubTags({ commit }, unfilteredCards) {
     commit('setSubTags', unfilteredCards)
+  },
+  setHiddenSubtags({ commit }, tags) {
+    commit('setHiddenSubtags', tags)
   }
 }
 

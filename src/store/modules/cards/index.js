@@ -110,6 +110,21 @@ const mutations = {
       state.filteredCards.push(cards.filter(card => !card.archived))
     }
     state.filteredCards = state.filteredCards.flat()
+  },
+  runSubtagFilter(state, hiddenSubtags) {
+    if (hiddenSubtags.length) {
+
+      // console.log(state.filteredCards)
+      // state.filteredCards = state.filteredCards.filter(card => {
+      //   let cardTagIds = card.tags.map(tag => tag.id)
+      //   cardTagIds.forEach(id => {
+      //     if (hiddenSubtags.map(tag => tag.id).includes(id)) {
+      //       console.log("RETURN FALSE")
+      //       return false
+      //     }
+      //   })
+      // })
+    }
   }
 }
 
@@ -162,18 +177,19 @@ const actions = {
     commit('setCardSearchQuery', query)
   },
   // call this: filterCardsFrom() ?
-  filterSelectedCards({ commit }, cards) {
+  filterSelectedCards({ commit, rootState }, cards) {
     commit('setUnfilteredCards', cards)
     commit('setFilteredCards', [])
     commit('runArchivedFilter', cards)
     commit('runActiveFilter', cards)
+    commit('runSubtagFilter', rootState.tags.hiddenSubtags)
   },
-  setShowArchived({ commit, dispatch, state }, value) {
-    commit('setShowArchived', value)
+  setShowArchived({ commit, dispatch, state }, payload) {
+    commit('setShowArchived', payload.value)
     dispatch('filterSelectedCards', state.unfilteredCards)
   },
-  setShowActive({ commit, dispatch, state  }, value) {
-    commit('setShowActive', value)
+  setShowActive({ commit, dispatch, state  }, payload) {
+    commit('setShowActive', payload.value)
     dispatch('filterSelectedCards', state.unfilteredCards)
   }
 }

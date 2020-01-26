@@ -8,7 +8,8 @@ export default {
       'selectedTags',
       'filteredCards',
       'activeCards',
-      'cardSearchQuery'
+      'cardSearchQuery',
+      'hiddenSubtags'
     ])
   },
   data () {
@@ -32,7 +33,8 @@ export default {
       'filterSelectedCards',
       'setCardSearchQuery',
       'setShowArchived',
-      'setShowActive'
+      'setShowActive',
+      'setHiddenSubtags'
     ]),
     clearAll() {
       this.setShowArchived(false)
@@ -40,6 +42,7 @@ export default {
       this.setCardSearchQuery('')
       this.resetSelectedTags()
       this.filterSelectedCards([])
+      this.setHiddenSubtags([])
     },
     cardCount(tag) {
       let count

@@ -37,6 +37,9 @@ export default {
       if (this.archivedOnly === value) {
         this.archivedOnly = !value
       }
+    },
+    hiddenSubtags() {
+      this.filterSelectedCards(this.unfilteredCards)
     }
   },
   computed: {
@@ -46,7 +49,9 @@ export default {
       'unfilteredCards',
       'showArchived',
       'showActive',
-      'subtags'
+      'subtags',
+      'hiddenSubtags',
+      'availableTags'
     ])
   },
   methods: {
@@ -58,7 +63,8 @@ export default {
       'resetSelectedTags',
       'setCardSearchQuery',
       'setShowArchived',
-      'setShowActive'
+      'setShowActive',
+      'setHiddenSubtags'
     ]),
     searchCards() {
       if (this.query) {
@@ -86,6 +92,15 @@ export default {
       this.includeArchived = false
       this.resetSelectedTags()
       this.filterSelectedCards([])
+    },
+    addOrRemoveFromHiddenSubtags(tag) {
+      if (this.hiddenSubtags.map(tag => tag.id).includes(tag.id)) {
+        let subtagIds = this.hiddenSubtags.map(tag => tag.id)
+        let index = subtagIds.indexOf(tag.id)
+        this.hiddenSubtags.splice(index, 1)
+      } else {
+        this.hiddenSubtags.push(tag)
+      }
     }
   }
 }
@@ -154,10 +169,12 @@ export default {
               class="checkbox-option"
               v-for="tag in subtags"
               :key="tag.id"
+              @click="addOrRemoveFromHiddenSubtags(tag)"
             >
               <input
                 type="checkbox"
                 class="show-options-checkbox"
+                :checked="!hiddenSubtags.map(tag => tag.id).includes(tag.id)"
               >
               <label
                 class="checkbox-label"
@@ -242,5 +259,15 @@ ul, li {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+.show-hide-options {
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 26px;
+  opacity: 0.4;
+  &:hover {
+    opacity: 0.7;
+  }
 }
 </style>

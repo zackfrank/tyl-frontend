@@ -10,7 +10,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['selectedTags', 'cards', 'filteredCards', 'cardSearchQuery'])
+    ...mapGetters([
+      'selectedTags',
+      'cards',
+      'filteredCards',
+      'cardSearchQuery'
+    ])
   },
   components: {
     CardModal
