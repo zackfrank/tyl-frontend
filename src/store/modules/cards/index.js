@@ -180,12 +180,12 @@ const actions = {
     commit('runActiveFilter', cards)
     commit('runSubtagFilter', rootState.tags.hiddenSubtags)
   },
-  setShowArchived({ commit, dispatch, state }, payload) {
-    commit('setShowArchived', payload.value)
+  setShowArchived({ commit, dispatch, state }, value) {
+    commit('setShowArchived', value)
     dispatch('filterSelectedCards', state.unfilteredCards)
   },
-  setShowActive({ commit, dispatch, state  }, payload) {
-    commit('setShowActive', payload.value)
+  setShowActive({ commit, dispatch, state  }, value) {
+    commit('setShowActive', value)
     dispatch('filterSelectedCards', state.unfilteredCards)
   }
 }
