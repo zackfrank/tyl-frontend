@@ -84,6 +84,7 @@ export default {
       }
     },
     showAllCards() {
+      this.setHiddenSubtags([])
       this.filterSelectedCards(this.cards)
     },
     clearCards() {
@@ -139,6 +140,40 @@ export default {
         <div class="sort-sub-section">
           <div id="show-options-header">Show Options:</div>
 
+          <!-- Show/Hide Subtags -->
+          <div class="sort-option-header">Subtags:</div>
+          <div
+            class="show-hide-options"
+            @click="setHiddenSubtags([])"
+          >
+            Show All
+          </div>
+          <div
+            class="show-hide-options"
+            @click="setHiddenSubtags(availableTags)"
+          >
+            Hide All
+          </div>
+          <ul class="sort-options">
+            <li
+              class="checkbox-option"
+              v-for="tag in subtags"
+              :key="tag.id"
+              @click="addOrRemoveFromHiddenSubtags(tag)"
+            >
+              <input
+                type="checkbox"
+                class="show-options-checkbox"
+                :checked="!hiddenSubtags.map(tag => tag.id).includes(tag.id)"
+              >
+              <label
+                class="checkbox-label"
+              >
+                {{ tag.name }}
+              </label>
+            </li>
+          </ul>
+
           <!-- Show/Hide Archived -->
           <div class="sort-option-header">Archived Tags:</div>
           <ul class="sort-options">
@@ -161,40 +196,6 @@ export default {
               </label>
             </li>
           </ul>
-
-          <!-- Show/Hide Subtags -->
-          <div class="sort-option-header">Subtags:</div>
-          <ul class="sort-options">
-            <li
-              class="checkbox-option"
-              v-for="tag in subtags"
-              :key="tag.id"
-              @click="addOrRemoveFromHiddenSubtags(tag)"
-            >
-              <input
-                type="checkbox"
-                class="show-options-checkbox"
-                :checked="!hiddenSubtags.map(tag => tag.id).includes(tag.id)"
-              >
-              <label
-                class="checkbox-label"
-              >
-                {{ tag.name }}
-              </label>
-            </li>
-          </ul>
-          <div
-            class="show-hide-options"
-            @click="setHiddenSubtags([])"
-          >
-            Show All
-          </div>
-          <div
-            class="show-hide-options"
-            @click="setHiddenSubtags(availableTags)"
-          >
-            Hide All
-          </div>
         </div>
 
       </div>
@@ -276,7 +277,9 @@ ul, li {
 .show-hide-options {
   font-size: 14px;
   cursor: pointer;
-  margin-left: 26px;
+  margin-top: 5px;
+  margin-left: 16px;
+  display: inline-block;
   opacity: 0.4;
   &:hover {
     opacity: 0.7;

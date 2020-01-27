@@ -113,17 +113,13 @@ const mutations = {
   },
   runSubtagFilter(state, hiddenSubtags) {
     if (hiddenSubtags.length) {
-
-      // console.log(state.filteredCards)
-      // state.filteredCards = state.filteredCards.filter(card => {
-      //   let cardTagIds = card.tags.map(tag => tag.id)
-      //   cardTagIds.forEach(id => {
-      //     if (hiddenSubtags.map(tag => tag.id).includes(id)) {
-      //       console.log("RETURN FALSE")
-      //       return false
-      //     }
-      //   })
-      // })
+      state.filteredCards = state.filteredCards.filter(card => {
+        let cardTagIds = card.tags.map(tag => tag.id)
+        let subtagsInCard = cardTagIds.filter(id =>
+          hiddenSubtags.map(tag => tag.id).includes(id)
+        )
+        return !subtagsInCard.length
+      })
     }
   }
 }
