@@ -183,6 +183,18 @@ export default {
               </label>
             </li>
           </ul>
+          <div
+            class="show-hide-options"
+            @click="setHiddenSubtags([])"
+          >
+            Show All
+          </div>
+          <div
+            class="show-hide-options"
+            @click="setHiddenSubtags(availableTags)"
+          >
+            Hide All
+          </div>
         </div>
 
       </div>
