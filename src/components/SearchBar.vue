@@ -50,8 +50,7 @@ export default {
       'showArchived',
       'showActive',
       'subtags',
-      'hiddenSubtags',
-      'availableTags'
+      'hiddenSubtags'
     ])
   },
   methods: {
@@ -150,7 +149,7 @@ export default {
           </div>
           <div
             class="show-hide-options"
-            @click="setHiddenSubtags(availableTags)"
+            @click="setHiddenSubtags(subtags)"
           >
             Hide All
           </div>

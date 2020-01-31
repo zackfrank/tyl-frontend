@@ -95,7 +95,7 @@ const actions = {
     commit('setSubTags', unfilteredCards)
   },
   setHiddenSubtags({ commit }, tags) {
-    commit('setHiddenSubtags', tags)
+    commit('setHiddenSubtags', tags.slice(0))
   }
 }
 
