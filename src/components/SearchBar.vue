@@ -83,6 +83,7 @@ export default {
       }
     },
     showAllCards() {
+      this.resetSelectedTags()
       this.setHiddenSubtags([])
       this.filterSelectedCards(this.cards)
     },
