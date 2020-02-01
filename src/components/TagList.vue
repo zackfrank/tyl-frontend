@@ -23,6 +23,11 @@ export default {
         this.selectTag(tag)
         this.setCardSearchQuery('')
       }
+      if (this.selectedTags.length < 2) {
+        this.setShowArchived(false)
+        this.setShowActive(false)
+        this.setHiddenSubtags([])
+      }
       this.tagToAdd = '' ;
     },
   },
