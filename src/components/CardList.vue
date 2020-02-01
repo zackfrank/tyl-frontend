@@ -35,7 +35,7 @@ export default {
   watch: {
     // If tags weren't cleared bc of search or selecting All Cards, set cards from tags
     selectedTags(tags) {
-      if (!this.cardSearchQuery && !(this.unfilteredCards == this.cards)) {
+      if (tags.length || !this.cardSearchQuery && !(this.unfilteredCards == this.cards)) {
         this.setFilteredCardsFromTags(tags)
       }
     },
