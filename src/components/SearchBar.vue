@@ -95,6 +95,7 @@ export default {
       }
     },
     showAllCards() {
+      this.setCardSearchQuery('')
       this.resetSelectedTags()
       this.setHiddenSubtags([])
       this.filterSelectedCards(this.cards)
