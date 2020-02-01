@@ -11,7 +11,13 @@ export default {
           available.push(tag) 
         }
       })
-      return available
+      return available.sort((tag1, tag2) => {
+        let name1 = tag1.name.toUpperCase()
+        let name2 = tag2.name.toUpperCase()
+        if (name1 < name2) { return -1 }
+        if (name1 > name2) { return 1 }
+        return 0;
+      })
     },
     saveAndCloseText() {
       if (
