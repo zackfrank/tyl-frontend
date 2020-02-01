@@ -60,6 +60,8 @@ export default {
         @click="manageCard(card)"
       >
         {{ card.title }}
+
+        <div class="date-created">Created: {{ card.date_created }}</div>
       </div>
 
       <!-- Card Modal -->
@@ -93,5 +95,11 @@ section {
   &:hover {
     opacity: 1;
   };
+}
+
+.date-created {
+  color: #55108B;
+  margin-top: 10px;
+  font-size: 11px;
 }
 </style>
