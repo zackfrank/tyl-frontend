@@ -44,6 +44,13 @@ export default {
       this.filterSelectedCards([])
       this.setHiddenSubtags([])
     },
+    removeSelectedTag(tag) {
+      if (this.selectedTags.length > 1) {
+        this.removeTag(tag)
+      } else {
+        this.clearAll()
+      }
+    },
     cardCount(tag) {
       let count
       if (!this.selectedTags.length) {
@@ -82,7 +89,7 @@ export default {
     <div class="selectedTags" v-for="tag in selectedTags" :key="tag.id">
       <div
         class="tagPills"
-        @click="removeTag(tag)"
+        @click="removeSelectedTag(tag)"
       >
         #{{ tag.name }}
         <span id='remove'>x</span>
