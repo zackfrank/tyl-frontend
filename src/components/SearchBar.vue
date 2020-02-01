@@ -100,7 +100,7 @@ export default {
       this.filterSelectedCards(this.cards)
     },
     clearCards() {
-      this.query = ''
+      this.setCardSearchQuery('')
       this.archivedOnly = false
       this.includeArchived = false
       this.resetSelectedTags()
@@ -128,6 +128,7 @@ export default {
         placeholder="Search Cards..."
         autocomplete="off"
         v-model="query"
+        @keyup.esc="clearCards"
         @input="searchCards"
       >
     </div>
