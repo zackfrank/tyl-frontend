@@ -183,8 +183,12 @@ export default {
       )
     },
     showAvailableTags() {
-      this.tagMatches = this.availableTags
-      this.showTags = true
+      if (!this.showTags) {
+        this.tagMatches = this.availableTags
+        this.showTags = true
+      } else {
+        this.showTags = false
+      }
     },
     save() {
       if (this.showEditDescriptionBox) {
