@@ -21,6 +21,7 @@ export default {
     tagToAdd(tag) {
       if (!this.selectedTags.includes(tag) && tag !== '') {
         this.selectTag(tag)
+        this.setCardSearchQuery('')
       }
       this.tagToAdd = '' ;
     },
