@@ -25,7 +25,7 @@ export default {
       }
       if (this.selectedTags.length < 2) {
         this.setShowArchived(false)
-        this.setShowActive(false)
+        this.setShowActive(true)
         this.setHiddenSubtags([])
       }
       this.tagToAdd = '' ;
@@ -44,7 +44,7 @@ export default {
     ]),
     clearAll() {
       this.setShowArchived(false)
-      this.setShowActive(false)
+      this.setShowActive(true)
       this.setCardSearchQuery('')
       this.resetSelectedTags()
       this.filterSelectedCards([])
