@@ -2,6 +2,13 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  mounted() {
+    // Close modal on Enter
+    document.addEventListener('keyup', this.closeModalOnEnter)
+  },
+  destroyed() {
+    document.removeEventListener('keyup', this.closeModalOnEnter)
+  },
   computed: {
     ...mapGetters(['tags', 'cards', 'currentCard']),
     availableTags() {
@@ -96,6 +103,11 @@ export default {
   },
   methods: {
     ...mapActions(['setCurrentCard', 'setCards', 'addNewTag']),
+    closeModalOnEnter(event) {
+      if (event.keyCode == 13) {
+        this.close()
+      }
+    },
     addOrRemoveTagFromCard(tag) {
       this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
         { tag: tag }).then(() => {
@@ -202,9 +214,9 @@ export default {
     },
     close() {
       this.save()
-      if (this.currentCard.tags[0] && this.currentCard.title) {
+      if (this.currentCard.tags.length && this.currentCard.title) {
         this.$emit('close')
-      } else if (!this.currentCard.tags[0]) {
+      } else if (!this.currentCard.tags.length) {
         if (this.tagQuery) {
           this.getTagFromTagNameAndAddToCard()
           this.$emit('close')
@@ -266,7 +278,7 @@ export default {
             v-model="title"
             ref="title"
             v-if="showEditTitleBox"
-            @keyup.enter="addTitle()"
+            @keyup.enter.stop="addTitle()"
             @click.stop
           >
 
@@ -284,7 +296,7 @@ export default {
               v-model="description"
               ref="description"
               v-if="showEditDescriptionBox"
-              @keyup.enter="addDescription()"
+              @keyup.enter.stop="addDescription()"
               @click.stop
             >
             </textarea>
@@ -307,7 +319,7 @@ export default {
                 placeholder="Add a tag..."
                 v-model="tagQuery"
                 @click.stop="showAvailableTags"
-                @keyup.enter="getTagFromTagNameAndAddToCard"
+                @keyup.enter.stop="getTagFromTagNameAndAddToCard"
               >
             </div>
             <div
