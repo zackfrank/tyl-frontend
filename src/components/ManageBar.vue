@@ -29,18 +29,18 @@ export default {
         )
       }
     },
-    createTag() {
-      if (this.newTagName) {
-        this.axios.post('http://localhost:3000/tags', { name: this.newTagName }).then(
-          response => {
-            this.addNewTag(response.data)
-            this.newTagName = ''
-            this.tagAdded = true
-            setTimeout(() => this.tagAdded = false, 5000)
-          }
-        )
-      }
-    },
+    // createTag() {
+    //   if (this.newTagName) {
+    //     this.axios.post('http://localhost:3000/tags', { name: this.newTagName }).then(
+    //       response => {
+    //         this.addNewTag(response.data)
+    //         this.newTagName = ''
+    //         this.tagAdded = true
+    //         setTimeout(() => this.tagAdded = false, 5000)
+    //       }
+    //     )
+    //   }
+    // },
     closeCreateCardModal() {
       this.showCreateCardModal = false
       this.cardAdded = true
@@ -71,7 +71,7 @@ export default {
     </div>
 
     <!-- Add Tag -->
-    <div class="add-tag">
+    <!-- <div class="add-tag">
       <div class="input-wrapper">
         <input
           type="text"
@@ -85,7 +85,7 @@ export default {
     </div>
     <div class="feedback">
       <div v-if="tagAdded">New tag added!</div>
-    </div>
+    </div> -->
 
     <CardModal
       v-if="showCreateCardModal"
