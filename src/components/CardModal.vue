@@ -177,7 +177,12 @@ export default {
       if (this.currentCard.tags[0] && this.currentCard.title) {
         this.$emit('close')
       } else if (!this.currentCard.tags[0]) {
-        this.tagFeedback = true
+        if (this.tagQuery) {
+          this.getTagFromTagNameAndAddToCard()
+          this.$emit('close')
+        } else {
+          this.tagFeedback = true
+        }
       }
     }
   }
@@ -317,7 +322,7 @@ export default {
               class="feedback"
               v-if="tagFeedback"
             >
-              -- ADD AT LEAST ONE TAG --
+              Add at least one tag
             </span>
           </div>
           
