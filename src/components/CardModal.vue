@@ -54,6 +54,8 @@ export default {
     },
     showEditDescriptionBox(value) {
       if (value) {
+        this.showDropDown = false
+        this.showTags = false
         this.$nextTick(() =>
           this.$refs.description.focus()
         )
@@ -61,6 +63,8 @@ export default {
     },
     showEditTitleBox(value) {
       if (value) {
+        this.showDropDown = false
+        this.showTags = false
         this.$nextTick(() =>
           this.$refs.title.focus()
         )
@@ -73,6 +77,20 @@ export default {
         )
       } else if (!input) {
         this.tagMatches = this.availableTags
+      }
+    },
+    showTags(value) {
+      if (value) {
+        this.showDropDown = false
+        this.showEditDescriptionBox = false
+        this.showEditTitleBox = false
+      }
+    },
+    showDropDown(value) {
+      if (value) {
+        this.showTags = false
+        this.showEditDescriptionBox = false
+        this.showEditTitleBox = false
       }
     }
   },
