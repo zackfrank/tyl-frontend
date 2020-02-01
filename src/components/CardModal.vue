@@ -202,6 +202,10 @@ export default {
         this.showTags = false
       }
     },
+    clearTagQuery() {
+      this.tagQuery = ''
+      this.showTags = false
+    },
     save() {
       if (this.showEditDescriptionBox) {
         this.addDescription()
@@ -319,6 +323,7 @@ export default {
                 placeholder="Add a tag..."
                 v-model="tagQuery"
                 @click.stop="showAvailableTags"
+                @keyup.esc="clearTagQuery"
                 @keyup.enter.stop="getTagFromTagNameAndAddToCard"
               >
             </div>
