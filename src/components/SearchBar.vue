@@ -1,4 +1,5 @@
 <script>
+import ToggleShowArrow from './ToggleShowArrow'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -6,8 +7,13 @@ export default {
     return {
       query: '',
       archivedOnly: false,
-      includeArchived: false
+      includeArchived: false,
+      showSubtagsSection: false,
+      showArchivedTagsSection: false
     }
+  },
+  components: {
+    ToggleShowArrow
   },
   watch: {
     cardSearchQuery(query) {
@@ -141,61 +147,77 @@ export default {
           <div id="show-options-header">Show Options:</div>
 
           <!-- Show/Hide Subtags -->
-          <div class="sort-option-header">Subtags:</div>
-          <div
-            class="show-hide-options"
-            @click="setHiddenSubtags([])"
-          >
-            Show All
+          <div class="sort-option-header">
+            Subtags
+            <ToggleShowArrow
+              :show="showSubtagsSection"
+              @show="showSubtagsSection = $event"
+            />
           </div>
-          <div
-            class="show-hide-options"
-            @click="setHiddenSubtags(subtags)"
-          >
-            Hide All
-          </div>
-          <ul class="sort-options">
-            <li
-              class="checkbox-option"
-              v-for="tag in subtags"
-              :key="tag.id"
-              @click="addOrRemoveFromHiddenSubtags(tag)"
+          <div v-if="showSubtagsSection">
+            <div
+              class="show-hide-options"
+              @click="setHiddenSubtags([])"
             >
-              <input
-                type="checkbox"
-                class="show-options-checkbox"
-                :checked="!hiddenSubtags.map(tag => tag.id).includes(tag.id)"
+              Show All
+            </div>
+            <div
+              class="show-hide-options"
+              @click="setHiddenSubtags(subtags)"
+            >
+              Hide All
+            </div>
+            <ul class="sort-options">
+              <li
+                class="checkbox-option"
+                v-for="tag in subtags"
+                :key="tag.id"
+                @click="addOrRemoveFromHiddenSubtags(tag)"
               >
-              <label
-                class="checkbox-label"
-              >
-                {{ tag.name }}
-              </label>
-            </li>
-          </ul>
+                <input
+                  type="checkbox"
+                  class="show-options-checkbox"
+                  :checked="!hiddenSubtags.map(tag => tag.id).includes(tag.id)"
+                >
+                <label
+                  class="checkbox-label"
+                >
+                  {{ tag.name }}
+                </label>
+              </li>
+            </ul>
+          </div>
 
           <!-- Show/Hide Archived -->
-          <div class="sort-option-header">Archived Tags:</div>
-          <ul class="sort-options">
-            <li class="checkbox-option">
-              <input type="checkbox" v-model="includeArchived" class="show-options-checkbox">
-              <label
-                class="checkbox-label"
-                @click="includeArchived = !includeArchived"
-              >
-                Include Archived
-              </label>
-            </li>
-            <li class="checkbox-option">
-              <input type="checkbox" v-model="archivedOnly" class="show-options-checkbox">
-              <label
-                class="checkbox-label"
-                @click="archivedOnly = !archivedOnly"
-              >
-                Archived Only
-              </label>
-            </li>
-          </ul>
+          <div class="sort-option-header">
+            Archived Tags 
+            <ToggleShowArrow
+              :show="showArchivedTagsSection"
+              @show="showArchivedTagsSection = $event"
+            />
+          </div>
+          <div v-if="showArchivedTagsSection">
+            <ul class="sort-options">
+              <li class="checkbox-option">
+                <input type="checkbox" v-model="includeArchived" class="show-options-checkbox">
+                <label
+                  class="checkbox-label"
+                  @click="includeArchived = !includeArchived"
+                >
+                  Include Archived
+                </label>
+              </li>
+              <li class="checkbox-option">
+                <input type="checkbox" v-model="archivedOnly" class="show-options-checkbox">
+                <label
+                  class="checkbox-label"
+                  @click="archivedOnly = !archivedOnly"
+                >
+                  Archived Only
+                </label>
+              </li>
+            </ul>
+          </div>
         </div>
 
       </div>
