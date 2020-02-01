@@ -46,6 +46,12 @@ export default {
     },
     hiddenSubtags() {
       this.filterSelectedCards(this.unfilteredCards)
+    },
+    unfilteredCards(cards) {
+      if (!cards.length) {
+        this.showSubtagsSection = false
+        this.showArchivedTagsSection = false
+      }
     }
   },
   computed: {
