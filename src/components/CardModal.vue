@@ -143,6 +143,8 @@ export default {
             }
           )
         }
+      } else {
+        this.close()
       }
     },
     addDescription() {
