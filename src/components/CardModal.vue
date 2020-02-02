@@ -79,6 +79,7 @@ export default {
     },
     tagQuery(input) {
       if (input) {
+        this.showTags = true
         this.tagMatches = this.availableTags.filter(tag => 
           tag.name.toLowerCase().includes(input.toLowerCase())
         )
