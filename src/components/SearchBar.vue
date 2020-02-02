@@ -62,7 +62,8 @@ export default {
       'showArchived',
       'showActive',
       'subtags',
-      'hiddenSubtags'
+      'hiddenSubtags',
+      'showAllCards'
     ])
   },
   methods: {
@@ -76,7 +77,8 @@ export default {
       'setShowArchived',
       'setShowActive',
       'setHiddenSubtags',
-      'setSearchResults'
+      'setSearchResults',
+      'setShowAllCards'
     ]),
     searchCards() {
       if (this.query) {
@@ -87,16 +89,18 @@ export default {
         this.setCardSearchQuery('')
       }
     },
-    showAllCards() {
+    showAllFilteredCards() {
       this.setCardSearchQuery('')
       this.resetSelectedTags()
       this.setHiddenSubtags([])
+      this.setShowAllCards(true)
       this.filterSelectedCards(this.cards)
     },
     clearCards() {
       this.setCardSearchQuery('')
       this.archivedOnly = false
       this.includeArchived = false
+      this.setShowAllCards(false)
       this.resetSelectedTags()
       this.filterSelectedCards([])
     },
@@ -129,7 +133,20 @@ export default {
 
     <!-- Main Show Options -->
     <div class="show-options-container">
-      <div class="show-options" @click="showAllCards">Show All Cards</div>
+      <div
+        class="show-options"
+        @click="showAllFilteredCards"
+        v-if="!showAllCards"
+      >
+        Show All Cards
+      </div>
+      <div
+        class="show-options"
+        @click="clearCards"
+        v-if="showAllCards || query"
+      >
+        Clear All
+      </div>
 
       <div id="sort-section" v-if="unfilteredCards.length">
 

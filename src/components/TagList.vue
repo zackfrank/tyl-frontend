@@ -103,8 +103,8 @@ export default {
     </div>
 
     <!-- Main Show Options -->
-    <div class="show-options-container" v-if="filteredCards[0] || selectedTags[0] || cardSearchQuery">
-      <div class="show-options" @click="clearAll">Clear All</div>
+    <div class="show-options-container" v-if="selectedTags[0]">
+      <div class="show-options" @click="clearAll">Clear Tags</div>
     </div>
   </section>
 </template>

@@ -6,7 +6,8 @@ const state = {
   currentCard: {},
   cardSearchQuery: '',
   showArchived: false,
-  showActive: true
+  showActive: true,
+  showAllCards: false
 }
 
 const getters = {
@@ -39,6 +40,9 @@ const getters = {
   },
   showActive (state) {
     return state.setShowActive
+  },
+  showAllCards (state) {
+    return state.showAllCards
   }
 }
 
@@ -96,6 +100,9 @@ const mutations = {
   setSearchResults(state, cards) {
     state.searchResults = cards
   },
+  setShowAllCards(state, value) {
+    state.showAllCards = value
+  },
   //  =======================
   //  ======= FILTERS =======
   //  =======================
@@ -133,6 +140,7 @@ const actions = {
     commit('updateCurrentCard')
   },
   setFilteredCardsFromTags({ dispatch, commit, state }, selectedTags) {
+    commit('setShowAllCards', false)
     if (selectedTags.length) {
       commit('setSelectedTagCards', state.cards.filter(
         card => selectedTags.map(tag => tag.id).every(
@@ -192,6 +200,7 @@ const actions = {
     dispatch('filterSelectedCards', state.unfilteredCards)
   },
   setSearchResults({ commit, dispatch, state }, cardSearchQuery) {
+    commit('setShowAllCards', false)
     commit('setCardSearchQuery', cardSearchQuery)
     let searchResults = state.cards.filter(card =>
       card.title.toLowerCase().includes(state.cardSearchQuery.toLowerCase()) ||
@@ -202,6 +211,9 @@ const actions = {
     )
     commit('setSearchResults', searchResults)
     dispatch('filterSelectedCards', searchResults)
+  },
+  setShowAllCards({ commit }, value) {
+    commit('setShowAllCards', value)
   }
 }
 
