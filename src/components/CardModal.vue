@@ -248,7 +248,8 @@ export default {
             <span>&#8226;&#8226;&#8226;</span>
           </div>
           <div
-            id="drop-down-menu"
+            class="drop-down-menu"
+            id="card-drop-down-menu"
             v-if="showDropDown"
             @click.stop
           >
@@ -313,7 +314,7 @@ export default {
           </div>
 
           <!-- Tag Section -->
-          <div class="modal-tags">
+          <div>
             <hr>
             <div class="input-wrapper" @click.stop>
               <input
@@ -334,6 +335,7 @@ export default {
               Enter to create/add new tag
             </div>
             <div
+              class="drop-down-menu"
               id="tag-drop-down-menu"
               v-if="showTags"
               @click.stop
@@ -411,6 +413,7 @@ export default {
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
+  position: relative;
 }
 
 #create-tag-hint {
@@ -431,18 +434,27 @@ export default {
   }
 }
 
-#drop-down-menu, #tag-drop-down-menu {
+.drop-down-menu {
+  position: absolute;
+  max-height: 250px;
+  overflow-y: scroll;
+  z-index: 999;
   background-color: white;
   width: 200px;
   padding: 8px;
   border-radius: 4px;
-  float: right;
-  margin-top: 20px;
-  margin-right: -20px;
   color: #606060;
   display: inline-block;
-  z-index: 9999;
   box-shadow: 0 3px 8px rgba(0, 0, 0, .3);
+}
+
+#card-drop-down-menu {
+  right: 1%;
+  margin-top: 20px;
+}
+
+#tag-drop-down-menu {
+  margin-top: 10px;
 }
 
 .drop-down-option {
@@ -474,12 +486,6 @@ export default {
 
 hr {
   margin: 30px 0 20px 0;
-}
-
-.modal-tags h4 {
-  color: #42b983;
-  margin-bottom: 4px;
-  margin-top: 0;
 }
 
 #remove {
