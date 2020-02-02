@@ -182,6 +182,10 @@ export default {
       this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
         { archived: value }).then(() => {
           this.getAndResetCards()
+          if (value) {
+            this.$emit('close')
+            this.setCurrentCard({})
+          }
         })
     },
     deleteCard() {
