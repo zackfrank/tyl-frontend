@@ -284,6 +284,7 @@ export default {
             type="text"
             v-model="title"
             ref="title"
+            @keyup.esc="showEditTitleBox = false"
             v-if="showEditTitleBox"
             @keyup.enter.stop="addTitle()"
             @click.stop
@@ -302,6 +303,7 @@ export default {
               rows="4"
               v-model="description"
               ref="description"
+              @keyup.esc="showEditDescriptionBox = false"
               v-if="showEditDescriptionBox"
               @keyup.enter.stop="addDescription()"
               @click.stop
