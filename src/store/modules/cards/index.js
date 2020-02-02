@@ -93,6 +93,9 @@ const mutations = {
   setShowActive(state, value) {
     state.showActive = value
   },
+  setSearchResults(state, cards) {
+    state.searchResults = cards
+  },
   //  =======================
   //  ======= FILTERS =======
   //  =======================
@@ -187,6 +190,18 @@ const actions = {
   setShowActive({ commit, dispatch, state  }, value) {
     commit('setShowActive', value)
     dispatch('filterSelectedCards', state.unfilteredCards)
+  },
+  setSearchResults({ commit, dispatch, state }, cardSearchQuery) {
+    commit('setCardSearchQuery', cardSearchQuery)
+    let searchResults = state.cards.filter(card =>
+      card.title.toLowerCase().includes(state.cardSearchQuery.toLowerCase()) ||
+      (
+        card.description &&
+        card.description.toLowerCase().includes(state.cardSearchQuery.toLowerCase())
+      )
+    )
+    commit('setSearchResults', searchResults)
+    dispatch('filterSelectedCards', searchResults)
   }
 }
 

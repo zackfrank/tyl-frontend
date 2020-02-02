@@ -22,7 +22,13 @@ export default {
     CardModal
   },
   methods: {
-    ...mapActions(['setFilteredCardsFromTags', 'setCurrentCard', 'resetSelectedTags']),
+    ...mapActions([
+      'setFilteredCardsFromTags',
+      'setCurrentCard',
+      'resetSelectedTags',
+      'setSearchResults',
+      'filterSelectedCards'
+    ]),
     manageCard(card) {
       this.setCurrentCard(card)
       this.showCardModal = true
@@ -43,6 +49,10 @@ export default {
     cards() {
       if (this.selectedTags.length) {
         this.setFilteredCardsFromTags(this.selectedTags)
+      } else if (this.cardSearchQuery) {
+        this.setSearchResults(this.cardSearchQuery)
+      } else {
+        this.filterSelectedCards(this.cards)
       }
     }
   }

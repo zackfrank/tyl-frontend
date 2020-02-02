@@ -75,20 +75,13 @@ export default {
       'setCardSearchQuery',
       'setShowArchived',
       'setShowActive',
-      'setHiddenSubtags'
+      'setHiddenSubtags',
+      'setSearchResults'
     ]),
     searchCards() {
       if (this.query) {
-        this.setCardSearchQuery(this.query)
         this.resetSelectedTags()
-        let searchResults = this.cards.filter(card =>
-          card.title.toLowerCase().includes(this.query.toLowerCase()) ||
-          (
-            card.description &&
-            card.description.toLowerCase().includes(this.query.toLowerCase())
-          )
-        )
-        this.filterSelectedCards(searchResults)
+        this.setSearchResults(this.query)
       } else {
         this.clearCards()
         this.setCardSearchQuery('')
