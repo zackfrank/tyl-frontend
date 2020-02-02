@@ -207,6 +207,7 @@ export default {
     clearTagQuery() {
       this.tagQuery = ''
       this.showTags = false
+      this.$refs.tagQuery.blur()
     },
     save() {
       if (this.showEditDescriptionBox) {
@@ -327,6 +328,7 @@ export default {
                 id="tag-input"
                 placeholder="Add a tag..."
                 v-model="tagQuery"
+                ref="tagQuery"
                 @click.stop="showAvailableTags"
                 @keyup.esc="clearTagQuery"
                 @keyup.enter.stop="getTagFromTagNameAndAddToCard"
