@@ -122,6 +122,7 @@ export default {
       let index = this.availableTags.indexOf(tag)
       this.availableTags.splice(index, 1)
       this.tagMatches = this.availableTags
+      this.showTags = false
     },
     removeTagFromCard(tag) {
       this.addOrRemoveTagFromCard(tag)
