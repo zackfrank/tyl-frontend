@@ -9,7 +9,6 @@ export default {
   data() {
     return {
       showCreateCardModal: false,
-      newCardTitle: '',
       newTagName: '',
       cardAdded: false,
       tagAdded: false
@@ -18,29 +17,14 @@ export default {
   methods: {
     ...mapActions(['setCurrentCard', 'addNewCard', 'addNewTag']),
     createCard() {
-      if (this.newCardTitle) {
-        this.axios.post('http://localhost:3000/cards', { title: this.newCardTitle }).then(
-          response => {
-            this.setCurrentCard(response.data)
-            this.addNewCard(response.data)
-            this.showCreateCardModal = true
-            this.newCardTitle = ''
-          }
-        )
-      }
+      this.axios.post('http://localhost:3000/cards', { title: "New Card" }).then(
+        response => {
+          this.setCurrentCard(response.data)
+          this.addNewCard(response.data)
+          this.showCreateCardModal = true
+        }
+      )
     },
-    // createTag() {
-    //   if (this.newTagName) {
-    //     this.axios.post('http://localhost:3000/tags', { name: this.newTagName }).then(
-    //       response => {
-    //         this.addNewTag(response.data)
-    //         this.newTagName = ''
-    //         this.tagAdded = true
-    //         setTimeout(() => this.tagAdded = false, 5000)
-    //       }
-    //     )
-    //   }
-    // },
     closeCreateCardModal() {
       this.showCreateCardModal = false
       this.cardAdded = true
@@ -55,37 +39,18 @@ export default {
   <section>
     <!-- Add Card -->
     <div class="add-card">
-      <div class="input-wrapper">
-        <input
-          type="text"
-          class="tylInput"
-          v-model="newCardTitle"
-          @keyup.enter="createCard"
-          placeholder="New Card Title..."
-          autocomplete="off"
+      <div class="create-wrapper">
+        <div
+          id="create-button"
+          @click="createCard"
         >
+        +
+        </div>
       </div>
     </div>
     <div class="feedback">
       <div v-if="cardAdded">New card added!</div>
     </div>
-
-    <!-- Add Tag -->
-    <!-- <div class="add-tag">
-      <div class="input-wrapper">
-        <input
-          type="text"
-          class="tylInput"
-          v-model="newTagName"
-          @keyup.enter="createTag"
-          placeholder="New Tag Name..."
-          autocomplete="off"
-        >
-      </div>
-    </div>
-    <div class="feedback">
-      <div v-if="tagAdded">New tag added!</div>
-    </div> -->
 
     <CardModal
       v-if="showCreateCardModal"
@@ -98,7 +63,6 @@ export default {
 section {
   width: 18%;
   float: right;
-  border-left: 1px solid grey;
   height: 80vh;
   margin-top: 0;
 }
@@ -108,11 +72,34 @@ select {
   margin-left: 8px;
 }
 
-.add-card, .add-tag {
-  margin-left: 8px;
+.add-card {
+  float: right;
+  display: table;
+  overflow: hidden;
+  border-radius: 3px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 80px;
+  height: 90px;
+  width: 90px;
+  color: white;
+  background-color: #55108B;
+  opacity: 0.5;
+  &:hover {
+    opacity: 0.7;
+  }
+  &:active {
+    opacity: 0.9;
+  }
 }
 
-.add-tag {
+.create-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#create-button {
+  width: 100%;
 }
 
 .input-wrapper {
