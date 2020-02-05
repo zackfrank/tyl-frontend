@@ -85,6 +85,7 @@ select {
   color: white;
   background-color: #55108B;
   opacity: 0.5;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
   &:hover {
     opacity: 0.7;
   }
