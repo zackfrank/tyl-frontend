@@ -249,6 +249,7 @@ section {
   float: left;
   border-right: 1px solid grey;
   height: 80vh;
+  min-width: 165px;
 }
 
 #sort-section {
