@@ -122,7 +122,6 @@ export default {
       let index = this.availableTags.indexOf(tag)
       this.availableTags.splice(index, 1)
       this.tagMatches = this.availableTags
-      this.showTags = false
     },
     removeTagFromCard(tag) {
       this.addOrRemoveTagFromCard(tag)
@@ -467,6 +466,7 @@ export default {
 
 #tag-drop-down-menu {
   margin-top: 10px;
+  opacity: 0.9;
 }
 
 .drop-down-option {
