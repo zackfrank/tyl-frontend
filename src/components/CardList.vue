@@ -72,7 +72,7 @@ export default {
       >
         {{ card.title }}
 
-        <div class="date-created">Created: {{ card.date_created }}</div>
+        <div class="date-created">{{ card.date_created }}</div>
       </div>
 
       <!-- Card Modal -->
