@@ -16,14 +16,9 @@ export default {
   },
   methods: {
     ...mapActions(['setCurrentCard', 'addNewCard', 'addNewTag']),
-    createCard() {
-      this.axios.post('http://localhost:3000/cards', { title: "New Card" }).then(
-        response => {
-          this.setCurrentCard(response.data)
-          this.addNewCard(response.data)
-          this.showCreateCardModal = true
-        }
-      )
+    openCardModal() {
+      this.setCurrentCard({tags: []})
+      this.showCreateCardModal = true
     },
     closeCreateCardModal() {
       this.showCreateCardModal = false
@@ -42,9 +37,9 @@ export default {
       <div class="create-wrapper">
         <div
           id="create-button"
-          @click="createCard"
+          @click="openCardModal"
         >
-        +
+          +
         </div>
       </div>
     </div>

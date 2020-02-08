@@ -1,7 +1,11 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import ConfirmCloseModal from './ConfirmCloseModal'
 
 export default {
+  components: {
+    ConfirmCloseModal
+  },
   mounted() {
     // Close modal on Enter
     document.addEventListener('keyup', this.closeModalOnEnter)
@@ -47,9 +51,11 @@ export default {
       showEditTitleBox: false,
       title: '',
       tagFeedback: false,
+      titleFeedback: false,
       tagQuery: '',
       tagMatches: [],
-      showTags: false
+      showTags: false,
+      showConfirmCloseModal: false
     }
   },
   watch: {
@@ -100,10 +106,15 @@ export default {
         this.showEditDescriptionBox = false
         this.showEditTitleBox = false
       }
+    },
+    currentCard(value) {
+      if (value.title) {
+        this.titleFeedback = false
+      }
     }
   },
   methods: {
-    ...mapActions(['setCurrentCard', 'setCards', 'addNewTag']),
+    ...mapActions(['setCurrentCard', 'setCards', 'addNewTag', 'addNewCard']),
     closeModalOnEnter(event) {
       if (event.keyCode == 13) {
         this.close()
@@ -117,11 +128,27 @@ export default {
           this.tagQuery = ''
         })
     },
-    addTagToCard(tag) {
-      this.addOrRemoveTagFromCard(tag)
+    async addTagToCard(tag) {
+      if (!this.currentCard.id) {
+        this.currentCard.tags.push(tag)
+        this.tagQuery = ''
+      } else {
+        this.addOrRemoveTagFromCard(tag)
+      }
       let index = this.availableTags.indexOf(tag)
       this.availableTags.splice(index, 1)
       this.tagMatches = this.availableTags
+    },
+    createCard() {
+      if (!this.currentCard.id) {
+        return this.axios.post('http://localhost:3000/cards',
+          {
+            title: this.currentCard.title,
+            description: this.currentCard.description,
+            tags: this.currentCard.tags
+          }
+        ).then(() => this.getAndResetCards())
+      }
     },
     removeTagFromCard(tag) {
       this.addOrRemoveTagFromCard(tag)
@@ -149,7 +176,11 @@ export default {
       }
     },
     addDescription() {
-      if (this.description.trim() !== this.currentCard.description) {
+      if (!this.currentCard.id) {
+        if (this.description.trim() !== this.currentCard.description) {
+          this.currentCard.description = this.description
+        }
+      } else if (this.description.trim() !== this.currentCard.description) {
         this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
           { description: this.description.trim() }).then(() => {
             this.getAndResetCards()
@@ -165,12 +196,19 @@ export default {
       this.description = this.currentCard.description
       this.showEditDescriptionBox = true
     },
+    toggleEditTitle() {
+      this.showEditTitleBox = !this.showEditTitleBox
+    },
     editTitle() {
       this.title = this.currentCard.title
       this.showEditTitleBox = true
     },
     addTitle() {
-      if (this.title.trim() && (this.title.trim() !== this.currentCard.title)) {
+      if (!this.currentCard.id) {
+        if (this.title.trim() && (this.title.trim() !== this.currentCard.title)) {
+          this.currentCard.title = this.title
+        }
+      } else if (this.title.trim() && (this.title.trim() !== this.currentCard.title)) {
         this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
           { title: this.title.trim() }).then(() => {
             this.getAndResetCards()
@@ -212,9 +250,15 @@ export default {
     clearTagQuery() {
       this.tagQuery = ''
       this.showTags = false
+    },
+    blurTagInput() {
+      this.clearTagQuery()
       this.$refs.tagQuery.blur()
     },
     save() {
+      if (!this.currentCard.id) {
+        return
+      }
       if (this.showEditDescriptionBox) {
         this.addDescription()
       }
@@ -224,17 +268,26 @@ export default {
       this.showDropDown = false
       this.showTags = false
     },
-    close() {
+    async close() {
       this.save()
-      if (this.currentCard.tags.length && this.currentCard.title) {
+      if (!this.currentCard.id) {
+        if (this.currentCard.title && this.currentCard.tags.length) {
+          await this.createCard()
+          this.$emit('close')
+        } else {
+          this.showConfirmCloseModal = true
+        }
+      } else if (this.currentCard.tags.length && this.currentCard.title) {
         this.$emit('close')
       } else if (!this.currentCard.tags.length) {
         if (this.tagQuery) {
           this.getTagFromTagNameAndAddToCard()
-          this.$emit('close')
+          this.close()
         } else {
           this.tagFeedback = true
         }
+      } else {
+        this.titleFeedback = true
       }
     }
   }
@@ -242,8 +295,8 @@ export default {
 </script>
 
 <template>
-  <transition name="modal">
-    <div class="modal-mask" @click="close">
+  <transition-group name="modal">
+    <div class="modal-mask" @click="close" key="1">
       <div class="modal-wrapper">
         <div class="modal-container" @click.stop="save">
 
@@ -252,6 +305,7 @@ export default {
             @click="showDropDown = !showDropDown"
             id="drop-down-icon"
             @click.stop
+            v-if="currentCard.id"
           >
             <span>&#8226;&#8226;&#8226;</span>
           </div>
@@ -279,6 +333,20 @@ export default {
           <!-- Title -->
           <div class="modal-title">
             <h3
+              v-if="!currentCard.title && !showEditTitleBox"
+              class="clickable edit-title"
+              @click.stop="toggleEditTitle"
+            >
+              Add a title
+            </h3>
+            <span
+              class="feedback"
+              id="title-feedback"
+              v-if="titleFeedback"
+            >
+              Card must have a title
+            </span>
+            <h3
               @click.stop="editTitle"
               v-if="!showEditTitleBox"
             >
@@ -286,13 +354,14 @@ export default {
             </h3>
           </div>
           <input
-            id="edit-title"
+            id="title"
             type="text"
             v-model="title"
             ref="title"
             @keyup.esc="showEditTitleBox = false"
             v-if="showEditTitleBox"
             @keyup.enter.stop="addTitle()"
+            @blur="addTitle()"
             @click.stop
           >
 
@@ -312,6 +381,7 @@ export default {
               @keyup.esc="showEditDescriptionBox = false"
               v-if="showEditDescriptionBox"
               @keyup.enter.stop="addDescription()"
+              @blur="addDescription()"
               @click.stop
             >
             </textarea>
@@ -335,8 +405,9 @@ export default {
                 v-model="tagQuery"
                 ref="tagQuery"
                 @click.stop="showAvailableTags"
-                @keyup.esc="clearTagQuery"
+                @keyup.esc="blurTagInput"
                 @keyup.enter.stop="getTagFromTagNameAndAddToCard"
+                @blur="clearTagQuery"
               >
             </div>
             <div
@@ -394,7 +465,13 @@ export default {
         </div>
       </div>
     </div>
-  </transition>
+    <ConfirmCloseModal
+      v-if="showConfirmCloseModal"
+      @abandon="$emit('close')"
+      @goBack="showConfirmCloseModal = false"
+      key="2"
+    />
+  </transition-group>
 </template>
 
 <style lang=scss scoped>
@@ -479,12 +556,12 @@ export default {
   }
 }
 
-.modal-title h3, #edit-title {
+.modal-title h3, #title {
   margin-top: 15px;
   color: #42b983;
 }
 
-#edit-title {
+#title {
   font-weight: bold;
   border: none;
   font-size: 1.17em;
@@ -528,6 +605,10 @@ hr {
   margin-bottom: 8px;
 }
 
+#title-feedback {
+  display: inline-block;
+}
+
 .modal-footer {
   margin-top: 20px;
   width: 100%;
@@ -568,13 +649,20 @@ hr {
   transform: scale(1.1);
 }
 
-.edit-description {
+.edit-description, .edit-title {
   opacity: 0.6;
   &:hover {
     opacity: 1;
   }
+}
+
+.edit-description {
   width: 130px;
   margin-bottom: 4px;
+}
+
+.edit-title {
+  width: 95px;
 }
 
 textarea {
