@@ -11,7 +11,10 @@ export default {
       response => { this.setTags(response.data) }
     )
     this.axios.get('http://localhost:3000/cards').then(
-      response => { this.setCards(response.data) }
+      response => {
+        this.setCards(response.data)
+        this.filterSelectedCards(response.data)
+      }
     )
   },
   computed: {
@@ -29,7 +32,7 @@ export default {
     ManageBar
   },
   methods: {
-    ...mapActions(['setTags', 'setCards', 'setSubTags'])
+    ...mapActions(['setTags', 'setCards', 'setSubTags', 'filterSelectedCards'])
   }
 }
 </script>

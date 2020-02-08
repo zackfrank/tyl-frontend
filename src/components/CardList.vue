@@ -15,8 +15,7 @@ export default {
       'cards',
       'unfilteredCards',
       'filteredCards',
-      'cardSearchQuery',
-      'showAllCards'
+      'cardSearchQuery'
     ])
   },
   components: {
@@ -52,7 +51,7 @@ export default {
         this.setFilteredCardsFromTags(this.selectedTags)
       } else if (this.cardSearchQuery) {
         this.setSearchResults(this.cardSearchQuery)
-      } else if (this.showAllCards) {
+      } else {
         this.filterSelectedCards(this.cards)
       }
     }

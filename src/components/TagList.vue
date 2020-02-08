@@ -4,6 +4,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters([
+      'cards',
       'availableTags',
       'selectedTags',
       'filteredCards',
@@ -47,7 +48,7 @@ export default {
       this.setShowActive(true)
       this.setCardSearchQuery('')
       this.resetSelectedTags()
-      this.filterSelectedCards([])
+      this.filterSelectedCards(this.cards)
       this.setHiddenSubtags([])
     },
     removeSelectedTag(tag) {

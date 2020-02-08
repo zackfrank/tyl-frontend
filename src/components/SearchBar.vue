@@ -62,9 +62,15 @@ export default {
       'showArchived',
       'showActive',
       'subtags',
-      'hiddenSubtags',
-      'showAllCards'
-    ])
+      'hiddenSubtags'
+    ]),
+    showOptions() {
+      return (
+        this.showArchived ||
+        this.includeArchived ||
+        this.hiddenSubtags.length
+      )
+    }
   },
   methods: {
     ...mapActions([
@@ -77,8 +83,7 @@ export default {
       'setShowArchived',
       'setShowActive',
       'setHiddenSubtags',
-      'setSearchResults',
-      'setShowAllCards'
+      'setSearchResults'
     ]),
     searchCards() {
       if (this.query) {
@@ -89,20 +94,18 @@ export default {
         this.setCardSearchQuery('')
       }
     },
-    showAllFilteredCards() {
-      this.setCardSearchQuery('')
-      this.resetSelectedTags()
-      this.setHiddenSubtags([])
-      this.setShowAllCards(true)
-      this.filterSelectedCards(this.cards)
-    },
     clearCards() {
       this.setCardSearchQuery('')
+      this.clearShowOptions()
+      this.filterSelectedCards(this.cards)
+    },
+    clearShowOptions() {
       this.archivedOnly = false
       this.includeArchived = false
-      this.setShowAllCards(false)
-      this.resetSelectedTags()
-      this.filterSelectedCards([])
+      this.showSubtagsSection = false
+      this.showArchivedTagsSection = false
+      this.setHiddenSubtags([])
+      this.filterSelectedCards(this.unfilteredCards)
     },
     addOrRemoveFromHiddenSubtags(tag) {
       if (this.hiddenSubtags.map(tag => tag.id).includes(tag.id)) {
@@ -135,17 +138,17 @@ export default {
     <div class="show-options-container">
       <div
         class="show-options"
-        @click="showAllFilteredCards"
-        v-if="!showAllCards"
+        v-if="query"
+        @click="clearCards"
       >
-        Show All Cards
+        Clear Search
       </div>
       <div
         class="show-options"
-        @click="clearCards"
-        v-if="showAllCards || query"
+        v-if="showOptions"
+        @click="clearShowOptions"
       >
-        Clear All
+        Reset Show Options
       </div>
 
       <div id="sort-section" v-if="unfilteredCards.length">
