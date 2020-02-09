@@ -67,6 +67,8 @@ export default {
         this.$nextTick(() =>
           this.$refs.description.focus()
         )
+      } else {
+        this.addDescription()
       }
     },
     showEditTitleBox(value) {
@@ -374,10 +376,10 @@ export default {
               v-model="description"
               ref="description"
               @keyup.esc="showEditDescriptionBox = false"
+              @keyup.enter.stop="showEditDescriptionBox = false"
+              @blur="showEditDescriptionBox = false"
               v-if="showEditDescriptionBox"
-              @keyup.enter.stop="$refs.description.blur()"
               @keypress.enter.prevent
-              @blur="addDescription()"
               @click.stop
             >
             </textarea>
