@@ -375,17 +375,18 @@ export default {
               ref="description"
               @keyup.esc="showEditDescriptionBox = false"
               v-if="showEditDescriptionBox"
-              @keyup.enter.stop="addDescription()"
+              @keyup.enter.stop="$refs.description.blur()"
+              @keypress.enter.prevent
               @blur="addDescription()"
               @click.stop
             >
             </textarea>
-            <span
+            <div
               @click.stop="editDescription"
               v-if="!showEditDescriptionBox"
             >
               {{ currentCard.description }}
-            </span>
+            </div>
           </div>
 
           <!-- Tag Section -->
