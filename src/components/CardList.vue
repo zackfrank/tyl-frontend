@@ -60,27 +60,25 @@ export default {
 </script>
 
 <template>
-  <section>
+  <section class="card-container">
     <!-- Cards -->
-    <div class="card-container">
-      <div
-        v-for="card in filteredCards"
-        :key="card.id"
-        class="card"
-        @click="manageCard(card)"
-      >
-        {{ card.title }}
+    <div
+      v-for="card in filteredCards"
+      :key="card.id"
+      class="card"
+      @click="manageCard(card)"
+    >
+      {{ card.title }}
 
-        <div class="date-created">{{ card.date_created }}</div>
-      </div>
-
-      <!-- Card Modal -->
-      <CardModal
-        v-if="showCardModal"
-        @close="closeCardModal"
-      >
-      </CardModal>
+      <div class="date-created">{{ card.date_created }}</div>
     </div>
+
+    <!-- Card Modal -->
+    <CardModal
+      v-if="showCardModal"
+      @close="closeCardModal"
+    >
+    </CardModal>
   </section>
 </template>
 
@@ -89,8 +87,10 @@ section {
   float: left;
   margin-top: 15px;
   margin-left: 8px;
-  width: 62%;
-  min-width: 400px;
+  mid-width: 260px;
+  width: 260px;
+  max-height: 73vh;
+  overflow-y: scroll;
 }
 
 .card {
