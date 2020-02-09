@@ -1,5 +1,10 @@
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
+  computed: {
+    ...mapGetters(['currentCard'])
+  },
   methods: {
     abandon() {
       this.$emit('abandon')
@@ -18,19 +23,35 @@ export default {
         <h3 class="modal-title">
           Abandon card?
         </h3>
-          <div class="details">In order to save, card requires:</div>
+          <div class="details">THIS CARD WILL NOT BE SAVED</div>
           <div class="requirements">
-            <div>Title</div>
-            <div>At least one tag</div>
+            <div>
+              This card is missing a
+              <span
+                v-if="!currentCard.title"
+              >
+                title
+              </span>
+              <span
+                v-if="!currentCard.title && !currentCard.tags.length"
+              >
+                and a
+              </span>
+              <span
+                v-if="!currentCard.tags.length"
+              >
+                tag
+              </span>
+            </div>
           </div>
         
         <!-- Close Button -->
         <div class="modal-footer">
-          <button class="modal-default-button" @click="abandon">
-            Abandon Card
-          </button>
           <button class="modal-default-button" @click="goBack">
             Go Back
+          </button>
+          <button class="modal-default-button" @click="abandon">
+            Abandon Card
           </button>
         </div>
       </div>

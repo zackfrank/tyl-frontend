@@ -1,17 +1,20 @@
 <script>
 import { mapActions } from 'vuex'
 import CardModal from './CardModal'
+import ConfirmCloseModal from './ConfirmCloseModal'
 
 export default {
   components: {
-    CardModal
+    CardModal,
+    ConfirmCloseModal
   },
   data() {
     return {
       showCreateCardModal: false,
+      showConfirmCloseModal: false,
       newTagName: '',
       cardAdded: false,
-      tagAdded: false
+      tagAdded: false,
     }
   },
   methods: {
@@ -27,6 +30,10 @@ export default {
       }
       setTimeout(() => this.cardAdded = false, 5000)
       this.setCurrentCard({})
+    },
+    closeModals() {
+      this.closeCreateCardModal()
+      this.showConfirmCloseModal = false
     }
   }
 }
@@ -52,6 +59,12 @@ export default {
     <CardModal
       v-if="showCreateCardModal"
       @close="closeCreateCardModal"
+      @showConfirmCloseModal="showConfirmCloseModal = true"
+    />
+    <ConfirmCloseModal
+      v-if="showConfirmCloseModal"
+      @abandon="closeModals"
+      @goBack="showConfirmCloseModal = false"
     />
   </section>
 </template>

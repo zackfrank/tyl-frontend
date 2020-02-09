@@ -1,11 +1,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import ConfirmCloseModal from './ConfirmCloseModal'
 
 export default {
-  components: {
-    ConfirmCloseModal
-  },
   mounted() {
     // Close modal on Enter
     document.addEventListener('keyup', this.closeModalOnEnter)
@@ -54,8 +50,7 @@ export default {
       titleFeedback: false,
       tagQuery: '',
       tagMatches: [],
-      showTags: false,
-      showConfirmCloseModal: false
+      showTags: false
     }
   },
   watch: {
@@ -275,7 +270,7 @@ export default {
           await this.createCard()
           this.$emit('close', true)
         } else {
-          this.showConfirmCloseModal = true
+          this.$emit('showConfirmCloseModal')
         }
       } else if (this.currentCard.tags.length && this.currentCard.title) {
         this.$emit('close', false)
@@ -295,8 +290,8 @@ export default {
 </script>
 
 <template>
-  <transition-group name="modal">
-    <div class="modal-mask" @click="close" key="1">
+  <transition name="modal">
+    <div class="modal-mask" @click="close">
       <div class="modal-wrapper">
         <div class="modal-container" @click.stop="save">
 
@@ -465,13 +460,7 @@ export default {
         </div>
       </div>
     </div>
-    <ConfirmCloseModal
-      v-if="showConfirmCloseModal"
-      @abandon="$emit('close', false)"
-      @goBack="showConfirmCloseModal = false"
-      key="2"
-    />
-  </transition-group>
+  </transition>
 </template>
 
 <style lang=scss scoped>
