@@ -20,9 +20,11 @@ export default {
       this.setCurrentCard({tags: []})
       this.showCreateCardModal = true
     },
-    closeCreateCardModal() {
+    closeCreateCardModal(cardCreated) {
       this.showCreateCardModal = false
-      this.cardAdded = true
+      if (cardCreated) {
+        this.cardAdded = true
+      }
       setTimeout(() => this.cardAdded = false, 5000)
       this.setCurrentCard({})
     }

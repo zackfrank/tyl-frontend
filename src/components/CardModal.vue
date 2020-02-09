@@ -222,14 +222,14 @@ export default {
         { archived: value }).then(() => {
           this.getAndResetCards()
           if (value) {
-            this.$emit('close')
+            this.$emit('close', false)
             this.setCurrentCard({})
           }
         })
     },
     deleteCard() {
       this.axios.delete(`http://localhost:3000/cards/${this.currentCard.id}`).then(() => {
-        this.$emit('close')
+        this.$emit('close', false)
         this.setCurrentCard({})
         this.getAndResetCards()
       })
@@ -273,12 +273,12 @@ export default {
       if (!this.currentCard.id) {
         if (this.currentCard.title && this.currentCard.tags.length) {
           await this.createCard()
-          this.$emit('close')
+          this.$emit('close', true)
         } else {
           this.showConfirmCloseModal = true
         }
       } else if (this.currentCard.tags.length && this.currentCard.title) {
-        this.$emit('close')
+        this.$emit('close', false)
       } else if (!this.currentCard.tags.length) {
         if (this.tagQuery) {
           this.getTagFromTagNameAndAddToCard()
@@ -467,7 +467,7 @@ export default {
     </div>
     <ConfirmCloseModal
       v-if="showConfirmCloseModal"
-      @abandon="$emit('close')"
+      @abandon="$emit('close', false)"
       @goBack="showConfirmCloseModal = false"
       key="2"
     />
