@@ -89,7 +89,7 @@ section {
   margin-left: 8px;
   mid-width: 260px;
   width: 260px;
-  max-height: 73vh;
+  height: 73vh;
   overflow-y: scroll;
 }
 
