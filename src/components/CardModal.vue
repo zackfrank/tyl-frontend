@@ -386,6 +386,7 @@ export default {
             <div
               @click.stop="editDescription"
               v-if="!showEditDescriptionBox"
+              class="description-box"
             >
               {{ currentCard.description }}
             </div>
@@ -563,6 +564,10 @@ export default {
 
 .modal-description {
   margin: 20px 0;
+}
+
+.description-box {
+  word-wrap: break-word;
 }
 
 hr {
