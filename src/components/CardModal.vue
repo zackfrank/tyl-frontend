@@ -244,7 +244,7 @@ export default {
     },
     clearTagQuery() {
       this.tagQuery = ''
-      this.showTags = false
+      // this.showTags = false // this broke adding tags -- refactor this
     },
     blurTagInput() {
       this.clearTagQuery()
