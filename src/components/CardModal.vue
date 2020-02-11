@@ -47,6 +47,7 @@ export default {
       title: '',
       tagFeedback: false,
       titleFeedback: false,
+      alreadySelectedTagFeedback: false,
       tagQuery: '',
       tagMatches: [],
       showTags: false
@@ -100,6 +101,13 @@ export default {
     currentCard(value) {
       if (value.title) {
         this.titleFeedback = false
+      }
+    },
+    alreadySelectedTagFeedback(value) {
+      if (value) {
+        setTimeout(() => {
+         this.alreadySelectedTagFeedback = false
+        }, 5000)
       }
     }
   },
@@ -155,19 +163,35 @@ export default {
         let existingTag = this.tags.find(
           tag => tag.name.toLowerCase() === this.tagQuery.toLowerCase()
         )
-        if (existingTag) {
+        if (existingTag && this.availableTags.includes(existingTag)) {
           this.addTagToCard(existingTag)
+        } else if (existingTag && !this.availableTags.includes(existingTag)) {
+          this.alreadySelectedTagFeedback = true
+          this.tagQuery = ''
         } else {
-          this.axios.post('http://localhost:3000/tags', { name: this.tagQuery }).then(
-            response => {
-              this.addNewTag(response.data)
-              this.tagQuery = ''
-              this.addTagToCard(response.data)
-            }
-          )
+          if (this.currentCard.id) {
+            this.axios.post('http://localhost:3000/tags', { name: this.tagQuery }).then(
+              response => {
+                this.addNewTag(response.data)
+                this.tagQuery = ''
+                this.addTagToCard(response.data)
+              }
+            )
+          } else {
+            this.currentCard.tags.push({name: this.tagQuery})
+            this.tagQuery = ''
+          }
         }
       } else {
+        // maybe this doesn't belong in this method
+        // closing the modal by hitting Enter in the text field
+        // should be handled another way
         this.close()
+      }
+    },
+    createTagIfQuery() {
+      if (this.tagQuery) {
+        this.getTagFromTagNameAndAddToCard()
       }
     },
     addDescription() {
@@ -393,6 +417,18 @@ export default {
           <!-- Tag Section -->
           <div>
             <hr>
+            <span
+              class="feedback"
+              v-if="tagFeedback"
+            >
+              Add at least one tag
+            </span>
+            <span
+              class="feedback"
+              v-if="alreadySelectedTagFeedback"
+            >
+              Tag is already selected
+            </span>
             <div class="input-wrapper" @click.stop>
               <input
                 type="text"
@@ -428,7 +464,7 @@ export default {
                 {{ tag.name }}
               </div>
               <div
-                @click="getTagFromTagNameAndAddToCard"
+                @click="createTagIfQuery"
                 class="drop-down-option"
                 v-if="!tagMatches.length"
               >
@@ -444,12 +480,6 @@ export default {
               #{{ tag.name }}
               <span id="remove">x</span>
             </div>
-            <span
-              class="feedback"
-              v-if="tagFeedback"
-            >
-              Add at least one tag
-            </span>
           </div>
           
           <!-- Close Button -->
