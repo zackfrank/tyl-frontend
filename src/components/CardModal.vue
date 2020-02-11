@@ -41,7 +41,6 @@ export default {
   data() {
     return {
       showDropDown: false,
-      tagToAdd: '',
       showEditDescriptionBox: false,
       description: '',
       showEditTitleBox: false,
@@ -54,12 +53,6 @@ export default {
     }
   },
   watch: {
-    tagToAdd(tag) {
-      if (tag !== '') {
-        this.addOrRemoveTagFromCard(tag);
-      }
-      this.tagToAdd = '' ;
-    },
     showEditDescriptionBox(value) {
       if (value) {
         this.showDropDown = false
@@ -125,7 +118,7 @@ export default {
           this.tagQuery = ''
         })
     },
-    async addTagToCard(tag) {
+    addTagToCard(tag) {
       if (!this.currentCard.id) {
         this.currentCard.tags.push(tag)
         this.tagQuery = ''
@@ -148,7 +141,12 @@ export default {
       }
     },
     removeTagFromCard(tag) {
-      this.addOrRemoveTagFromCard(tag)
+      if (!this.currentCard.id) {
+        let index = this.currentCard.tags.indexOf(tag)
+        this.currentCard.tags.splice(index, 1)
+      } else {
+        this.addOrRemoveTagFromCard(tag)
+      }
       this.availableTags.push(tag)
     },
     // Extract tag creation (also in ManageBar) into central API
@@ -236,7 +234,7 @@ export default {
         response => this.setCards(response.data)
       )
     },
-    showAvailableTags() {
+    toggleTags() {
       if (!this.showTags) {
         this.tagMatches = this.availableTags
         this.showTags = true
@@ -402,7 +400,7 @@ export default {
                 placeholder="Add a tag..."
                 v-model="tagQuery"
                 ref="tagQuery"
-                @click.stop="showAvailableTags"
+                @click.stop="toggleTags"
                 @keyup.esc="blurTagInput"
                 @keyup.enter.stop="getTagFromTagNameAndAddToCard"
                 @blur="clearTagQuery"
