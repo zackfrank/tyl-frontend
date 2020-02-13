@@ -112,7 +112,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setCurrentCard', 'setCards', 'addNewTag', 'addNewCard']),
+    ...mapActions(['setCurrentCard', 'setCards', 'addNewTag', 'addNewCard', 'setTags']),
     closeModalOnEnter(event) {
       if (event.keyCode == 13) {
         this.close()
@@ -145,7 +145,12 @@ export default {
             description: this.currentCard.description,
             tags: this.currentCard.tags
           }
-        ).then(() => this.getAndResetCards())
+        ).then(() => {
+          this.getAndResetCards()
+          this.axios.get('http://localhost:3000/tags').then(
+            response => { this.setTags(response.data) }
+          )
+        })
       }
     },
     removeTagFromCard(tag) {
