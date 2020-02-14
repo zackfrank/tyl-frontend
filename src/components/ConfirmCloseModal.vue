@@ -23,25 +23,32 @@ export default {
         <h3 class="modal-title">
           Abandon card?
         </h3>
-          <div class="details">THIS CARD WILL NOT BE SAVED</div>
-          <div class="requirements">
+          <div class="details">
             <div>
-              This card is missing a
-              <span
-                v-if="!currentCard.title"
-              >
-                title
+              <span>
+                This card will not be saved
+                <br>because it is missing:
               </span>
-              <span
-                v-if="!currentCard.title && !currentCard.tags.length"
-              >
-                and a
-              </span>
-              <span
-                v-if="!currentCard.tags.length"
-              >
-                tag
-              </span>
+              <div class="requirements">
+                <span>a</span>
+                <span
+                  v-if="!currentCard.title"
+                  class="missing"
+                >
+                  title
+                </span>
+                <span
+                  v-if="!currentCard.title && !currentCard.tags.length"
+                >
+                  and a
+                </span>
+                <span
+                  v-if="!currentCard.tags.length"
+                  class="missing"
+                >
+                  tag
+                </span>
+              </div>
             </div>
           </div>
         
@@ -79,6 +86,7 @@ export default {
 
 .modal-container {
   width: 40%;
+  height: 250px;
   margin: 0px auto;
   padding: 2px 30px 10px;
   background-color: #fff;
@@ -91,19 +99,25 @@ export default {
 
 h3 {
   text-align: center;
-  margin-top: 15px;
+  margin-top: 5%;
+  margin-bottom: 5%;
   color: #42b983;
 }
 
 .details {
   text-align: center;
+  font-weight: bold;
+  margin-top: 12%;
+  margin-bottom: 13%;
+  text-transform: uppercase;
 }
 
 .requirements {
-  text-align: center;
-  font-weight: bold;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 30px;
+}
+
+.missing {
+  color: #d44950;
 }
 
 .modal-footer {
