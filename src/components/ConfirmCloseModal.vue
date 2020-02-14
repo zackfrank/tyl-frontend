@@ -30,23 +30,22 @@ export default {
                 <br>because it is missing:
               </span>
               <div class="requirements">
-                <span>a</span>
                 <span
                   v-if="!currentCard.title"
                   class="missing"
                 >
-                  title
+                  a title
                 </span>
                 <span
                   v-if="!currentCard.title && !currentCard.tags.length"
                 >
-                  and a
+                  and
                 </span>
                 <span
                   v-if="!currentCard.tags.length"
                   class="missing"
                 >
-                  tag
+                  a tag
                 </span>
               </div>
             </div>

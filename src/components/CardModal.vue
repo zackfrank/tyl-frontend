@@ -295,8 +295,14 @@ export default {
         if (this.currentCard.title && this.currentCard.tags.length) {
           await this.createCard()
           this.$emit('close', true)
-        } else {
+        } else if (
+            this.currentCard.title ||
+            this.currentCard.description ||
+            this.currentCard.tags.length
+          ) {
           this.$emit('showConfirmCloseModal')
+        } else {
+          this.$emit('close', true)
         }
       } else if (this.currentCard.tags.length && this.currentCard.title) {
         this.$emit('close', false)
