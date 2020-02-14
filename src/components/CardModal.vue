@@ -153,6 +153,10 @@ export default {
         })
       }
     },
+    deleteCard() {
+      this.showDropDown = false
+      this.$emit('showConfirmDeleteModal')
+    },
     removeTagFromCard(tag) {
       if (!this.currentCard.id) {
         let index = this.currentCard.tags.indexOf(tag)
@@ -243,19 +247,12 @@ export default {
     },
     toggleArchived(value) {
       this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
-        { archived: value }).then(() => {
-          this.getAndResetCards()
-          if (value) {
-            this.$emit('close', false)
-            this.setCurrentCard({})
-          }
-        })
-    },
-    deleteCard() {
-      this.axios.delete(`http://localhost:3000/cards/${this.currentCard.id}`).then(() => {
-        this.$emit('close', false)
-        this.setCurrentCard({})
+      { archived: value }).then(() => {
         this.getAndResetCards()
+        if (value) {
+          this.$emit('close', false)
+          this.setCurrentCard({})
+        }
       })
     },
     getAndResetCards() {

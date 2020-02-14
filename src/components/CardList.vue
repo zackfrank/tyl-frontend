@@ -1,12 +1,14 @@
 <script>
 import CardModal from './CardModal'
 import { mapGetters, mapActions } from 'vuex'
+import ConfirmDeleteModal from './ConfirmDeleteModal'
 
 export default {
   data() {
     return {
       showCardModal: false,
-      showArchived: false
+      showArchived: false,
+      showConfirmDeleteModal: false
     }
   },
   computed: {
@@ -15,11 +17,13 @@ export default {
       'cards',
       'unfilteredCards',
       'filteredCards',
-      'cardSearchQuery'
+      'cardSearchQuery',
+      'currentCard'
     ])
   },
   components: {
-    CardModal
+    CardModal,
+    ConfirmDeleteModal
   },
   methods: {
     ...mapActions([
@@ -27,7 +31,8 @@ export default {
       'setCurrentCard',
       'resetSelectedTags',
       'setSearchResults',
-      'filterSelectedCards'
+      'filterSelectedCards',
+      'setCards'
     ]),
     manageCard(card) {
       this.setCurrentCard(card)
@@ -36,6 +41,19 @@ export default {
     closeCardModal() {
       this.showCardModal = false
       this.setCurrentCard({})
+    },
+    deleteCard() {
+      this.axios.delete(`http://localhost:3000/cards/${this.currentCard.id}`).then(() => {
+        this.showCardModal = false
+        this.showConfirmDeleteModal = false
+        this.setCurrentCard({})
+        this.getAndResetCards()
+      })
+    },
+    getAndResetCards() {
+      this.axios.get('http://localhost:3000/cards').then(
+        response => this.setCards(response.data)
+      )
     }
   },
   watch: {
@@ -77,8 +95,14 @@ export default {
     <CardModal
       v-if="showCardModal"
       @close="closeCardModal"
+      @showConfirmDeleteModal="showConfirmDeleteModal = true"
     >
     </CardModal>
+    <ConfirmDeleteModal
+      v-if="showConfirmDeleteModal"
+      @deleteCard="deleteCard"
+      @goBack="showConfirmDeleteModal = false"
+    />
   </section>
 </template>
 
