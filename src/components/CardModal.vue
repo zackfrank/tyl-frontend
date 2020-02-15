@@ -118,7 +118,8 @@ export default {
       'addNewTag',
       'addNewCard',
       'setTags',
-      'triggerCardCreated'
+      'triggerCardCreated',
+      'triggerCardArchived'
     ]),
     closeModalOnEnter(event) {
       if (event.keyCode == 13) {
@@ -260,6 +261,7 @@ export default {
         if (value) {
           this.$emit('close')
           this.setCurrentCard({})
+          this.triggerCardArchived()
         }
       })
     },

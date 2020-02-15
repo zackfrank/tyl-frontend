@@ -20,7 +20,8 @@ export default {
       'filteredCards',
       'cardSearchQuery',
       'currentCard',
-      'cardDeleted'
+      'cardDeleted',
+      'cardArchived'
     ])
   },
   components: {
@@ -111,6 +112,10 @@ export default {
     <CardActionAlertModal
       v-if="cardDeleted"
       :deleted="true"
+    />
+    <CardActionAlertModal
+      v-if="cardArchived"
+      :archived="true"
     />
   </section>
 </template>

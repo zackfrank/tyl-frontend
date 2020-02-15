@@ -10,6 +10,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    archived: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
 }
@@ -25,6 +30,9 @@ export default {
           </h3>
           <h3 class="modal-title" id="deleted" v-if="deleted">
             - Card Deleted -
+          </h3>
+          <h3 class="modal-title" id="archived" v-if="archived">
+            - Card Archived -
           </h3>
         </div>
       </div>
@@ -75,6 +83,10 @@ h3 {
 
 #deleted {
   color: #d44950;
+}
+
+#archived {
+  color: #55108B;
 }
 
 /*

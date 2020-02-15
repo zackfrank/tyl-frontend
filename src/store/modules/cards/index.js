@@ -8,7 +8,8 @@ const state = {
   showArchived: false,
   showActive: true,
   cardCreated: false,
-  cardDeleted: false
+  cardDeleted: false,
+  cardArchived: false
 }
 
 const getters = {
@@ -47,6 +48,9 @@ const getters = {
   },
   cardDeleted (state) {
     return state.cardDeleted
+  },
+  cardArchived (state) {
+    return state.cardArchived
   }
 }
 
@@ -114,6 +118,12 @@ const mutations = {
     state.cardDeleted = true
     setTimeout(() => {
       state.cardDeleted = false
+    }, 500)
+  },
+  triggerCardArchived(state) {
+    state.cardArchived = true
+    setTimeout(() => {
+      state.cardArchived = false
     }, 500)
   },
   //  =======================
@@ -229,6 +239,9 @@ const actions = {
   triggerCardDeleted({ commit }) {
     commit('triggerCardDeleted')
   },
+  triggerCardArchived({ commit }) {
+    commit('triggerCardArchived')
+  }
 }
 
 export default {
