@@ -1,15 +1,20 @@
 <script>
+import ManageTagsModal from './ManageTagsModal'
+
 export default {
+  components: {
+    ManageTagsModal
+  },
   data () {
     return {
-      inbox: []
+      showManageTagsModal: false
     }
   },
   methods: {
-    goHome () {
+    goHome() {
       this.$router.push('/')
     },
-    signOut () {
+    signOut() {
       this.$router.push('/login')
     }
   }
@@ -27,10 +32,15 @@ export default {
     <!-- Nav Menu -->
     <nav id="navMenu">
       <ul>
+        <li><a @click="showManageTagsModal = true">Manage Tags</a></li>
         <li><a @click="signOut">Sign Out</a></li>
       </ul>
     </nav>
     <!-- End Nav Menu -->
+    <ManageTagsModal
+      v-if="showManageTagsModal"
+      @close="showManageTagsModal = false"
+    />
   </header>
 </template>
 

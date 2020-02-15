@@ -16,7 +16,7 @@ export default {
       required: false,
       default: false
     }
-  },
+  }
 }
 </script>
 
@@ -87,6 +87,7 @@ h3 {
 
 #archived {
   color: #55108B;
+  opacity: 0.7;
 }
 
 /*
