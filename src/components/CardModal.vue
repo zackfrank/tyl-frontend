@@ -112,7 +112,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setCurrentCard', 'setCards', 'addNewTag', 'addNewCard', 'setTags']),
+    ...mapActions([
+      'setCurrentCard',
+      'setCards',
+      'addNewTag',
+      'addNewCard',
+      'setTags',
+      'triggerCardCreated'
+    ]),
     closeModalOnEnter(event) {
       if (event.keyCode == 13) {
         this.close()
@@ -146,6 +153,7 @@ export default {
             tags: this.currentCard.tags
           }
         ).then(() => {
+          this.triggerCardCreated()
           this.getAndResetCards()
           this.axios.get('http://localhost:3000/tags').then(
             response => { this.setTags(response.data) }
@@ -250,7 +258,7 @@ export default {
       { archived: value }).then(() => {
         this.getAndResetCards()
         if (value) {
-          this.$emit('close', false)
+          this.$emit('close')
           this.setCurrentCard({})
         }
       })
@@ -294,7 +302,7 @@ export default {
       if (!this.currentCard.id) {
         if (this.currentCard.title && this.currentCard.tags.length) {
           await this.createCard()
-          this.$emit('close', true)
+          this.$emit('close')
         } else if (
             this.currentCard.title ||
             this.currentCard.description ||
@@ -302,10 +310,10 @@ export default {
           ) {
           this.$emit('showConfirmCloseModal')
         } else {
-          this.$emit('close', true)
+          this.$emit('close')
         }
       } else if (this.currentCard.tags.length && this.currentCard.title) {
-        this.$emit('close', false)
+        this.$emit('close')
       } else if (!this.currentCard.tags.length) {
         if (this.tagQuery) {
           this.getTagFromTagNameAndAddToCard()

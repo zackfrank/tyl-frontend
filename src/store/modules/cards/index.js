@@ -6,7 +6,9 @@ const state = {
   currentCard: {},
   cardSearchQuery: '',
   showArchived: false,
-  showActive: true
+  showActive: true,
+  cardCreated: false,
+  cardDeleted: false
 }
 
 const getters = {
@@ -39,6 +41,12 @@ const getters = {
   },
   showActive (state) {
     return state.setShowActive
+  },
+  cardCreated (state) {
+    return state.cardCreated
+  },
+  cardDeleted (state) {
+    return state.cardDeleted
   }
 }
 
@@ -95,6 +103,18 @@ const mutations = {
   },
   setSearchResults(state, cards) {
     state.searchResults = cards
+  },
+  triggerCardCreated(state) {
+    state.cardCreated = true
+    setTimeout(() => {
+      state.cardCreated = false
+    }, 500)
+  },
+  triggerCardDeleted(state) {
+    state.cardDeleted = true
+    setTimeout(() => {
+      state.cardDeleted = false
+    }, 500)
   },
   //  =======================
   //  ======= FILTERS =======
@@ -202,7 +222,13 @@ const actions = {
     )
     commit('setSearchResults', searchResults)
     dispatch('filterSelectedCards', searchResults)
-  }
+  },
+  triggerCardCreated({ commit }) {
+    commit('triggerCardCreated')
+  },
+  triggerCardDeleted({ commit }) {
+    commit('triggerCardDeleted')
+  },
 }
 
 export default {

@@ -2,6 +2,7 @@
 import CardModal from './CardModal'
 import { mapGetters, mapActions } from 'vuex'
 import ConfirmDeleteModal from './ConfirmDeleteModal'
+import CardActionAlertModal from './CardActionAlertModal'
 
 export default {
   data() {
@@ -18,12 +19,14 @@ export default {
       'unfilteredCards',
       'filteredCards',
       'cardSearchQuery',
-      'currentCard'
+      'currentCard',
+      'cardDeleted'
     ])
   },
   components: {
     CardModal,
-    ConfirmDeleteModal
+    ConfirmDeleteModal,
+    CardActionAlertModal
   },
   methods: {
     ...mapActions([
@@ -32,7 +35,8 @@ export default {
       'resetSelectedTags',
       'setSearchResults',
       'filterSelectedCards',
-      'setCards'
+      'setCards',
+      'triggerCardDeleted'
     ]),
     manageCard(card) {
       this.setCurrentCard(card)
@@ -48,6 +52,7 @@ export default {
         this.showConfirmDeleteModal = false
         this.setCurrentCard({})
         this.getAndResetCards()
+        this.triggerCardDeleted()
       })
     },
     getAndResetCards() {
@@ -102,6 +107,10 @@ export default {
       v-if="showConfirmDeleteModal"
       @deleteCard="deleteCard"
       @goBack="showConfirmDeleteModal = false"
+    />
+    <CardActionAlertModal
+      v-if="cardDeleted"
+      :deleted="true"
     />
   </section>
 </template>

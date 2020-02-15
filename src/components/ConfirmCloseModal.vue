@@ -17,52 +17,54 @@ export default {
 </script>
 
 <template>
-  <div class="modal-mask">
-    <div class="modal-wrapper">
-      <div class="modal-container">
-        <h3 class="modal-title">
-          Abandon card?
-        </h3>
-          <div class="details">
-            <div>
-              <span>
-                This card will not be saved
-                <br>because it is missing:
-              </span>
-              <div class="requirements">
-                <span
-                  v-if="!currentCard.title"
-                  class="missing"
-                >
-                  a title
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+          <h3 class="modal-title">
+            Abandon card?
+          </h3>
+            <div class="details">
+              <div>
+                <span>
+                  This card will not be saved
+                  <br>because it is missing:
                 </span>
-                <span
-                  v-if="!currentCard.title && !currentCard.tags.length"
-                >
-                  and
-                </span>
-                <span
-                  v-if="!currentCard.tags.length"
-                  class="missing"
-                >
-                  a tag
-                </span>
+                <div class="requirements">
+                  <span
+                    v-if="!currentCard.title"
+                    class="missing"
+                  >
+                    a title
+                  </span>
+                  <span
+                    v-if="!currentCard.title && !currentCard.tags.length"
+                  >
+                    and
+                  </span>
+                  <span
+                    v-if="!currentCard.tags.length"
+                    class="missing"
+                  >
+                    a tag
+                  </span>
+                </div>
               </div>
             </div>
+          
+          <!-- Close Button -->
+          <div class="modal-footer">
+            <button class="modal-default-button" @click="goBack">
+              Go Back
+            </button>
+            <button class="modal-default-button" @click="abandon">
+              Abandon Card
+            </button>
           </div>
-        
-        <!-- Close Button -->
-        <div class="modal-footer">
-          <button class="modal-default-button" @click="goBack">
-            Go Back
-          </button>
-          <button class="modal-default-button" @click="abandon">
-            Abandon Card
-          </button>
         </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <style lang=scss scoped>

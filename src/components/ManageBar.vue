@@ -1,34 +1,32 @@
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import CardModal from './CardModal'
 import ConfirmCloseModal from './ConfirmCloseModal'
+import CardActionAlertModal from './CardActionAlertModal'
 
 export default {
+  computed: {
+    ...mapGetters(['cardCreated'])
+  },
   components: {
     CardModal,
-    ConfirmCloseModal
+    ConfirmCloseModal,
+    CardActionAlertModal
   },
   data() {
     return {
       showCreateCardModal: false,
-      showConfirmCloseModal: false,
-      newTagName: '',
-      cardAdded: false,
-      tagAdded: false,
+      showConfirmCloseModal: false
     }
   },
   methods: {
-    ...mapActions(['setCurrentCard', 'addNewCard', 'addNewTag']),
+    ...mapActions(['setCurrentCard']),
     openCardModal() {
       this.setCurrentCard({tags: []})
       this.showCreateCardModal = true
     },
-    closeCreateCardModal(cardCreated) {
+    closeCreateCardModal() {
       this.showCreateCardModal = false
-      if (cardCreated) {
-        this.cardAdded = true
-      }
-      setTimeout(() => this.cardAdded = false, 5000)
       this.setCurrentCard({})
     },
     closeModals() {
@@ -52,9 +50,6 @@ export default {
         </div>
       </div>
     </div>
-    <div class="feedback">
-      <div v-if="cardAdded">New card added!</div>
-    </div>
 
     <CardModal
       v-if="showCreateCardModal"
@@ -65,6 +60,10 @@ export default {
       v-if="showConfirmCloseModal"
       @abandon="closeModals"
       @goBack="showConfirmCloseModal = false"
+    />
+    <CardActionAlertModal
+      v-if="cardCreated"
+      :created="true"
     />
   </section>
 </template>
