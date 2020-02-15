@@ -168,7 +168,7 @@ export default {
           <div id="show-options-header">Show Options:</div>
 
           <!-- Show/Hide Subtags -->
-          <div class="sort-option-header toggle">
+          <div class="sort-option-header clickable">
             <span @click="showSubtagsSection = !showSubtagsSection">
               Subtags
             </span>
@@ -212,7 +212,7 @@ export default {
           </div>
 
           <!-- Show/Hide Archived -->
-          <div class="sort-option-header toggle">
+          <div class="sort-option-header clickable">
             <span @click="showArchivedTagsSection = !showArchivedTagsSection">
               Archived Tags
             </span>
@@ -272,10 +272,6 @@ section {
   opacity: 0.7;
   font-size: 14px;
   margin-top: 8px;
-}
-
-.toggle {
-  cursor: pointer;
 }
 
 #show-options-header {
