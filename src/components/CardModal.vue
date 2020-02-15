@@ -425,6 +425,15 @@ export default {
           <!-- Tag Section -->
           <div>
             <hr>
+            <div
+              v-for="tag in currentCard.tags"
+              :key="tag.id"
+              class="tags"
+              @click="removeTagFromCard(tag)"
+            >
+              #{{ tag.name }}
+              <span id="remove">x</span>
+            </div>
             <span
               class="feedback"
               v-if="tagFeedback"
@@ -478,15 +487,6 @@ export default {
               >
                 - Create Tag -
               </div>
-            </div>
-            <div 
-              v-for="tag in currentCard.tags"
-              :key="tag.id"
-              class="tags"
-              @click="removeTagFromCard(tag)"
-            >
-              #{{ tag.name }}
-              <span id="remove">x</span>
             </div>
           </div>
           
