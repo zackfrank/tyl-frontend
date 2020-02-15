@@ -61,8 +61,6 @@ export default {
         this.$nextTick(() =>
           this.$refs.description.focus()
         )
-      } else {
-        this.addDescription()
       }
     },
     showEditTitleBox(value) {
@@ -391,12 +389,13 @@ export default {
             </h3>
           </div>
           <input
+            placeholder="Add a title..."
             id="title"
             type="text"
             v-model="title"
             ref="title"
-            @keyup.esc="showEditTitleBox = false"
             v-if="showEditTitleBox"
+            @keyup.esc="showEditTitleBox = false"
             @keyup.enter.stop="addTitle()"
             @blur="addTitle()"
             @click.stop
@@ -405,24 +404,30 @@ export default {
           <!-- Description -->
           <div class="modal-description">
             <div
-              v-if="!currentCard.description"
+              v-if="!currentCard.description && !showEditDescriptionBox"
               class="clickable edit-description"
               @click.stop="toggleEditDescription"
             >
               Add a description
             </div>
             <textarea
+              placeholder="Add a description..."
               rows="4"
               v-model="description"
               ref="description"
               @keyup.esc="showEditDescriptionBox = false"
-              @keyup.enter.stop="showEditDescriptionBox = false"
-              @blur="showEditDescriptionBox = false"
+              @keyup.enter.stop
               v-if="showEditDescriptionBox"
-              @keypress.enter.prevent
               @click.stop
             >
             </textarea>
+            <div
+              class="clickable save"
+              v-if="showEditDescriptionBox"
+              @click="addDescription()"
+            >
+              Save
+            </div>
             <div
               @click.stop="editDescription"
               v-if="!showEditDescriptionBox"
@@ -614,6 +619,25 @@ export default {
 
 .description-box {
   word-wrap: break-word;
+}
+
+textarea {
+  max-width: 100%;
+  min-width: 100%;
+  max-height: 300px;
+}
+
+.save {
+  width: 40px;
+  display: block;
+  color: #42b983;
+  opacity: 0.6;
+  &:hover {
+    opacity: 0.8;
+  }
+  &:active {
+    opacity: 1;
+  }
 }
 
 hr {
