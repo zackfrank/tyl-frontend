@@ -15,6 +15,16 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    tagDeleted: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    tagUpdated: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   }
 }
@@ -33,6 +43,12 @@ export default {
           </h3>
           <h3 class="modal-title" id="archived" v-if="archived">
             - Card Archived -
+          </h3>
+          <h3 class="modal-title" id="deleted" v-if="tagDeleted">
+            - Tag Deleted -
+          </h3>
+          <h3 class="modal-title" id="created" v-if="tagUpdated">
+            - Tag Updated -
           </h3>
         </div>
       </div>

@@ -1,21 +1,46 @@
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import ManageTagsModal from './ManageTagsModal'
+import ActionAlertModal from './ActionAlertModal'
+import ConfirmDeleteModal from './ConfirmDeleteModal'
 
 export default {
+  computed: {
+    ...mapGetters(['tagDeleted', 'tagUpdated', 'tags'])
+  },
   components: {
-    ManageTagsModal
+    ManageTagsModal,
+    ActionAlertModal,
+    ConfirmDeleteModal
   },
   data () {
     return {
-      showManageTagsModal: false
+      showManageTagsModal: false,
+      showConfirmDeleteModal: false,
+      selectedTag: {}
     }
   },
   methods: {
+    ...mapActions(['triggerTagDeleted']),
     goHome() {
       this.$router.push('/')
     },
     signOut() {
       this.$router.push('/login')
+    },
+    setUpToDeleteTag(tag) {
+      this.selectedTag = tag
+      this.showConfirmDeleteModal = true
+    },
+    deleteTag() {
+      this.axios.delete(`http://localhost:3000/tags/${this.selectedTag.id}`).then(
+        () => {
+          this.showConfirmDeleteModal = false
+          this.triggerTagDeleted()
+          let index = this.tags.indexOf(this.selectedTag)
+          this.tags.splice(index, 1)
+        }
+      )
     }
   }
 }
@@ -40,6 +65,21 @@ export default {
     <ManageTagsModal
       v-if="showManageTagsModal"
       @close="showManageTagsModal = false"
+      @setUpToDeleteTag="setUpToDeleteTag"
+    />
+    <ConfirmDeleteModal
+      v-if="showConfirmDeleteModal"
+      :tag="true"
+      @confirmDelete="deleteTag"
+      @goBack="showConfirmDeleteModal = false"
+    />
+    <ActionAlertModal
+      v-if="tagDeleted"
+      :tagDeleted="true"
+    />
+    <ActionAlertModal
+      v-if="tagUpdated"
+      :tagUpdated="true"
     />
   </header>
 </template>

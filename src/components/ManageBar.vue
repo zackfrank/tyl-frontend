@@ -2,7 +2,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import CardModal from './CardModal'
 import ConfirmCloseModal from './ConfirmCloseModal'
-import CardActionAlertModal from './CardActionAlertModal'
+import ActionAlertModal from './ActionAlertModal'
 
 export default {
   computed: {
@@ -11,7 +11,7 @@ export default {
   components: {
     CardModal,
     ConfirmCloseModal,
-    CardActionAlertModal
+    ActionAlertModal
   },
   data() {
     return {
@@ -61,7 +61,7 @@ export default {
       @abandon="closeModals"
       @goBack="showConfirmCloseModal = false"
     />
-    <CardActionAlertModal
+    <ActionAlertModal
       v-if="cardCreated"
       :created="true"
     />

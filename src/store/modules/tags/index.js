@@ -3,7 +3,9 @@ const state = {
   availableTags: [],
   selectedTags: [],
   subtags: [],
-  hiddenSubtags: []
+  hiddenSubtags: [],
+  tagDeleted: false,
+  tagUpdated: false
 }
 
 const getters = {
@@ -28,6 +30,12 @@ const getters = {
   },
   hiddenSubtags(state) {
     return state.hiddenSubtags
+  },
+  tagDeleted(state) {
+    return state.tagDeleted
+  },
+  tagUpdated(state) {
+    return state.tagUpdated
   }
 }
 
@@ -72,6 +80,18 @@ const mutations = {
   },
   setHiddenSubtags(state, tags) {
     state.hiddenSubtags = tags
+  },
+  triggerTagDeleted(state) {
+    state.tagDeleted = true
+    setTimeout(() => {
+      state.tagDeleted = false
+    }, 500)
+  },
+  triggerTagUpdated(state) {
+    state.tagUpdated = true
+    setTimeout(() => {
+      state.tagUpdated = false
+    }, 500)
   }
 }
 
@@ -96,6 +116,12 @@ const actions = {
   },
   setHiddenSubtags({ commit }, tags) {
     commit('setHiddenSubtags', tags.slice(0))
+  },
+  triggerTagDeleted({ commit }) {
+    commit('triggerTagDeleted')
+  },
+  triggerTagUpdated({ commit }) {
+    commit('triggerTagUpdated')
   }
 }
 

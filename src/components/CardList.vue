@@ -2,7 +2,7 @@
 import CardModal from './CardModal'
 import { mapGetters, mapActions } from 'vuex'
 import ConfirmDeleteModal from './ConfirmDeleteModal'
-import CardActionAlertModal from './CardActionAlertModal'
+import ActionAlertModal from './ActionAlertModal'
 
 export default {
   data() {
@@ -27,7 +27,7 @@ export default {
   components: {
     CardModal,
     ConfirmDeleteModal,
-    CardActionAlertModal
+    ActionAlertModal
   },
   methods: {
     ...mapActions([
@@ -106,14 +106,15 @@ export default {
     </CardModal>
     <ConfirmDeleteModal
       v-if="showConfirmDeleteModal"
-      @deleteCard="deleteCard"
+      :card="true"
+      @confirmDelete="deleteCard"
       @goBack="showConfirmDeleteModal = false"
     />
-    <CardActionAlertModal
+    <ActionAlertModal
       v-if="cardDeleted"
       :deleted="true"
     />
-    <CardActionAlertModal
+    <ActionAlertModal
       v-if="cardArchived"
       :archived="true"
     />

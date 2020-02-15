@@ -1,13 +1,20 @@
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
-  computed: {
-    ...mapGetters(['currentCard'])
+  props: {
+    card: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+    tag: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
   },
   methods: {
-    deleteCard() {
-      this.$emit('deleteCard')
+    confirmDelete() {
+      this.$emit('confirmDelete')
     },
     goBack() {
       this.$emit('goBack')
@@ -22,15 +29,22 @@ export default {
       <div class="modal-wrapper">
         <div class="modal-container">
           <h3 class="modal-title">
-            Are you sure you want to delete this card?
+            Are you sure you want to delete this
+            <span v-if="card">card</span>
+            <span v-if="tag">tag</span>?
           </h3>
 
+          <div v-if="tag" class="center bold tag-message">
+            <div class="message-part"><span id="note">NOTE</span>: Tag will be removed</div>
+            <div class="message-part">from any active and archived cards</div>
+          </div>
+
           <!-- Close Button -->
-          <div class="modal-footer">
+          <div class="modal-footer footer">
             <button class="modal-default-button" @click="goBack">
               <span class="bold">GO BACK</span>
             </button>
-            <button class="modal-default-button" @click="deleteCard">
+            <button class="modal-default-button" @click="confirmDelete">
               <span class="bold">DELETE</span>
             </button>
           </div>
@@ -74,13 +88,28 @@ export default {
 h3 {
   text-align: center;
   padding-top: 10%;
-  margin-bottom: 15%;
   margin-top: 15px;
   color: #d44950;
 }
 
+#note {
+  text-decoration: underline;
+}
+
+.tag-message {
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.message-part {
+  margin-top: 8px;
+}
+
 .modal-footer {
   text-align: center;
+  width: 100%;
+  left: 0;
+  margin-bottom: 10px;
 }
 
 .modal-default-button {

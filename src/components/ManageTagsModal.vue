@@ -10,7 +10,7 @@ export default {
     document.removeEventListener('keyup', this.closeModalOnEnter)
   },
   computed: {
-    ...mapGetters(['tags', 'cards'])
+    ...mapGetters(['tags', 'cards', 'tagDeleted'])
   },
   data() {
     return {
@@ -27,10 +27,18 @@ export default {
           this.tagName = ''
         }
       }
+    },
+    tagDeleted(value) {
+      if (value) {
+        this.clearTag()
+      }
     }
   },
   methods: {
-    ...mapActions(['setTags', 'removeTag']),
+    ...mapActions([
+      'setTags',
+      'triggerTagUpdated'
+    ]),
     closeModalOnEnter(event) {
       if (event.keyCode == 13) {
         this.$emit('close')
@@ -76,18 +84,15 @@ export default {
       this.axios.patch(`http://localhost:3000/tags/${this.selectedTag.id}`,
         { name: this.tagName }).then(() => {
           this.clearTag()
+          this.triggerTagUpdated()
           this.axios.get('http://localhost:3000/tags').then(
             response => { this.setTags(response.data) }
           )
-        })
-    },
-    deleteTag() {
-      this.axios.delete(`http://localhost:3000/tags/${this.selectedTag.id}`).then(
-        () => {
-          this.removeTag(this.selectedTag)
-          this.clearTag()
         }
       )
+    },
+    deleteTag() {
+      this.$emit('setUpToDeleteTag', this.selectedTag)
     }
   }
 }
@@ -97,7 +102,7 @@ export default {
   <transition name="modal">
     <div class="modal-mask" @click="$emit('close')">
       <div class="modal-wrapper">
-        <div class="modal-container" @click.stop>
+        <div class="modal-container" @click.stop="showTags = false">
           <div
             @click="$emit('close')"
             id="close-icon"
@@ -115,7 +120,7 @@ export default {
               type="text"
               class="tylInput"
               id="tag-input"
-              placeholder="Add a tag..."
+              placeholder="Select a tag..."
               v-model="tagName"
               ref="editTag"
               @click.stop="toggleShowTags"
