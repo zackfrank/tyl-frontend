@@ -611,6 +611,10 @@ export default {
   font-size: 1.17em;
   width: 95%;
   padding: 7px;
+  &::placeholder {
+    color: #42b983;
+    opacity: 0.5;
+  }
 }
 
 .modal-description {
