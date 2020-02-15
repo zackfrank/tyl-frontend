@@ -85,7 +85,7 @@ select {
   float: right;
   display: table;
   overflow: hidden;
-  border-radius: 3px;
+  border-radius: 50%;
   cursor: pointer;
   text-align: center;
   font-size: 80px;
@@ -93,8 +93,9 @@ select {
   width: 90px;
   color: white;
   background-color: #55108B;
+  background: radial-gradient(#e66465, #55108B);
   opacity: 0.5;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12), 0px 3px 5px -1px rgba(0,0,0,0.2), inset 1px 1px 0 rgba(0,0,0,.1), inset 0 -1px 0 rgba(0,0,0,.07);
   &:hover {
     opacity: 0.7;
   }
