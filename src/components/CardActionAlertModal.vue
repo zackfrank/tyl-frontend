@@ -69,10 +69,12 @@ export default {
   transition: all 1.2s ease;
   font-family: Helvetica, Arial, sans-serif;
   position: relative;
+  display: table;
 }
 
 h3 {
-  margin-top: 12%;
+  display: table-cell;
+  vertical-align: middle;
   font-size: 24px;
   text-align: center;
 }
