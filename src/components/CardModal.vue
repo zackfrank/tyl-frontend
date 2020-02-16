@@ -5,6 +5,9 @@ export default {
   mounted() {
     // Close modal on Enter
     document.addEventListener('keyup', this.closeModalOnEnter)
+    if (!this.currentCard.id) {
+      this.showEditTitleBox = true
+    }
   },
   destroyed() {
     document.removeEventListener('keyup', this.closeModalOnEnter)
@@ -142,6 +145,9 @@ export default {
       let index = this.availableTags.indexOf(tag)
       this.availableTags.splice(index, 1)
       this.tagMatches = this.availableTags
+      this.$nextTick(() =>
+        this.$refs.tagQuery.focus()
+      )
     },
     createCard() {
       if (!this.currentCard.id) {
