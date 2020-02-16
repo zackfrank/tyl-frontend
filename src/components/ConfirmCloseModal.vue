@@ -86,7 +86,7 @@ export default {
 }
 
 .modal-container {
-  width: 40%;
+  width: 400px;
   height: 250px;
   margin: 0px auto;
   padding: 2px 30px 10px;
@@ -131,6 +131,7 @@ h3 {
   font-size: 16px;
   border: none;
   opacity: 0.7;
+  font-weight: bold;
   cursor: pointer;
   &:hover {
     opacity: 1;
