@@ -85,7 +85,6 @@ export default {
     showTags(value) {
       if (value) {
         this.showDropDown = false
-        this.showEditDescriptionBox = false
         this.showEditTitleBox = false
       }
     },
@@ -286,6 +285,7 @@ export default {
     },
     save() {
       if (!this.currentCard.id) {
+        this.showTags = false
         return
       }
       if (this.showEditDescriptionBox) {
@@ -418,7 +418,7 @@ export default {
               @keyup.esc="showEditDescriptionBox = false"
               @keyup.enter.stop
               v-if="showEditDescriptionBox"
-              @click.stop
+              @click.stop="showTags = false"
             >
             </textarea>
             <div
