@@ -171,7 +171,6 @@ export default {
       } else {
         this.addOrRemoveTagFromCard(tag)
       }
-      this.availableTags.push(tag)
     },
     // Extract tag creation (also in ManageBar) into central API
     getTagFromTagNameAndAddToCard() {
