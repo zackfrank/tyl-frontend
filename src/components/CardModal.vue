@@ -28,6 +28,7 @@ export default {
     },
     saveAndCloseText() {
       if (
+           (!this.currentCard.id && this.currentCard.title && this.currentCard.tags.length) ||
            (this.showEditDescriptionBox &&
              (this.description.trim() !== (this.currentCard.description ? this.currentCard.description : ''))
            ) ||
