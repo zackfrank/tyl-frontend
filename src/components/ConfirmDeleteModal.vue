@@ -88,7 +88,7 @@ export default {
 
 h3 {
   text-align: center;
-  padding-top: 10%;
+  padding-top: 9%;
   margin-top: 15px;
   color: #d44950;
 }
