@@ -94,10 +94,34 @@ select {
   color: white;
   background-color: #55108B;
   background: radial-gradient(#e66465, #55108B);
-  opacity: 0.5;
+  opacity: 0.7;
   box-shadow: 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12), 0px 3px 5px -1px rgba(0,0,0,0.2), inset 1px 1px 0 rgba(0,0,0,.1), inset 0 -1px 0 rgba(0,0,0,.07);
+  transition-property: after;
+  transition-duration: .6s;
+  position: relative;
+  span {
+    z-index: 20;
+  }
+  &:after {
+    background: #fff;
+    content: "";
+    height: 155px;
+    left: -75px;
+    opacity: .2;
+    position: absolute;
+    top: -50px;
+    transform: rotate(20deg);
+    transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+    width: 50px;
+    z-index: -10;
+  }
   &:hover {
-    opacity: 0.7;
+    opacity: 0.8;
+    box-shadow: 0px 8px 12px 2px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12), 0px 3px 5px -1px rgba(0,0,0,0.2), inset 1px 1px 0 rgba(0,0,0,.1), inset 0 -1px 0 rgba(0,0,0,.07);
+    &:after {
+      left: 140%;
+      transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+    }
   }
   &:active {
     opacity: 0.9;

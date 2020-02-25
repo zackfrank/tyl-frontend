@@ -140,10 +140,30 @@ section {
   box-shadow: 2px 2px 1px 0px rgba(0, 0, 0, 0.15);
   opacity: 0.9;
   cursor: pointer;
-  border-radius: 7px;
+  border-radius: 3px;
   &:hover {
     opacity: 1;
   };
+}
+
+.card:nth-child(5n-0) {
+  background: #FE4365;
+}
+
+.card:nth-child(5n-1) {
+  background: #FC9D9A;
+}
+
+.card:nth-child(5n-2) {
+  background: #F9CDAD;
+}
+
+.card:nth-child(5n-3) {
+  background: #C8C8A9;
+}
+
+.card:nth-child(5n-4) {
+  background: #83AF9B;
 }
 
 .date-created {
