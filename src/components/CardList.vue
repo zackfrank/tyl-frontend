@@ -141,6 +141,7 @@ section {
   opacity: 0.9;
   cursor: pointer;
   border-radius: 3px;
+  word-wrap: break-word;
   &:hover {
     opacity: 1;
   };
