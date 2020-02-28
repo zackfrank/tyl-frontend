@@ -21,19 +21,19 @@ export default {
         this.query = ''
       }
     },
-    includeArchived(value) {
-      this.setShowArchived(value)
-      if (!value) {
-        this.archivedOnly = false
-      }
-    },
-    archivedOnly(value) {
-      this.setShowActive(!value)
-      if (value) {
-        this.includeArchived = true
-        this.setShowArchived(true)
-      }
-    },
+    // includeArchived(value) {
+    //   this.setShowArchived(value)
+    //   if (!value) {
+    //     this.archivedOnly = false
+    //   }
+    // },
+    // archivedOnly(value) {
+    //   this.setShowActive(!value)
+    //   if (value) {
+    //     this.includeArchived = true
+    //     this.setShowArchived(true)
+    //   }
+    // },
     showArchived(value) {
       if (this.includeArchived !== value) {
         this.includeArchived = value
@@ -115,6 +115,21 @@ export default {
       } else {
         this.hiddenSubtags.push(tag)
       }
+    },
+    choose(type) {
+      switch (type) {
+        case 'active':
+          this.setShowArchived(false)
+          this.setShowActive(true)
+          break
+        case 'includeArchived':
+          this.setShowActive(true)
+          this.setShowArchived(true)
+          break
+        case 'archivedOnly':
+          this.setShowActive(false)
+          this.setShowArchived(true)
+      }
     }
   }
 }
@@ -165,7 +180,15 @@ export default {
 
         <!-- SHOW OPTIONS -->
         <div class="sort-sub-section">
+
+
           <div id="show-options-header">Show Options:</div>
+          <input type="radio" id="active" name="show-archived" checked @click="choose('active')">
+          <label for="active">Active</label><br>
+          <input type="radio" id="includeArchived" name="show-archived" @click="choose('includeArchived')">
+          <label for="includeArchived">Active + Archived</label><br>
+          <input type="radio" id="archivedOnly" name="show-archived" @click="choose('archivedOnly')">
+          <label for="archivedOnly">Archived Only</label>
 
           <!-- Show/Hide Subtags -->
           <div class="sort-option-header clickable">
@@ -212,7 +235,7 @@ export default {
           </div>
 
           <!-- Show/Hide Archived -->
-          <div class="sort-option-header clickable">
+          <!-- <div class="sort-option-header clickable">
             <span @click="showArchivedTagsSection = !showArchivedTagsSection">
               Archived Tags
             </span>
@@ -242,7 +265,7 @@ export default {
                 </label>
               </li>
             </ul>
-          </div>
+          </div> -->
         </div>
 
       </div>
