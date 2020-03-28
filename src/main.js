@@ -6,8 +6,10 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import store from '@/store'
  
-Vue.use(VueAxios, axios, Vuelidate)
+Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
+
+Vue.use(Vuelidate)
 
 new Vue({
   router,
