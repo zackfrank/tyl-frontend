@@ -6,7 +6,7 @@ import ConfirmDeleteModal from './ConfirmDeleteModal'
 
 export default {
   computed: {
-    ...mapGetters(['tagDeleted', 'tagUpdated', 'tags'])
+    ...mapGetters(['tagDeleted', 'tagUpdated', 'tags', 'user'])
   },
   components: {
     ManageTagsModal,
@@ -55,7 +55,7 @@ export default {
     </h1>
 
     <!-- Nav Menu -->
-    <nav id="navMenu">
+    <nav id="navMenu" v-if="user">
       <ul>
         <li><a @click="showManageTagsModal = true">Manage Tags</a></li>
         <li><a @click="signOut">Sign Out</a></li>

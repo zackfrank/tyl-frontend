@@ -48,7 +48,7 @@ export default {
       <button
         @click="goToHome"
       >
-        Enter TYL
+        Login
       </button>
     </section>
   </main>
