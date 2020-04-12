@@ -12,6 +12,12 @@ Vue.config.productionTip = false
 Vue.use(Vuelidate)
 
 new Vue({
+  created: function() {
+    let token = localStorage.getItem("token")
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = token
+    }
+  },
   router,
   store,
   render: h => h(App),

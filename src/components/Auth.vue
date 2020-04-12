@@ -1,11 +1,13 @@
 <script>
+import { mapActions } from 'vuex'
 import { required, email } from 'vuelidate/lib/validators'
 
 export default {
   data () {
     return {
       email: '',
-      password: ''
+      password: '',
+      authFailed: false
     }
   },
   validations: {
@@ -18,9 +20,15 @@ export default {
     }
   },
   methods: {
-    goToHome () {
+    ...mapActions(['login']),
+    async tryLogin() {
       if (!this.$v.$invalid) {
-        this.$router.push('/')
+        try {
+          await this.login({ user: { email: this.email, password: this.password } })
+          this.$router.push({ name: 'home' })
+        } catch (error) {
+          this.authFailed = true
+        }
       }
     }
   }
@@ -34,27 +42,44 @@ export default {
       <input 
         type="text" 
         @blur="$v.email.$touch()"
-        v-model="email"
+        v-model.trim="email"
         :class="{invalid: $v.email.$error}"
+        @keyup.enter="tryLogin"
       >
+      <div class="validations" v-if="$v.email.$error">
+        <p class="validation" v-if="!$v.email.required">
+          You need to enter an email homie...
+        </p>
+        <p class="validation" v-if="!$v.email.email">
+          Try entering a valid email dude...
+        </p>
+      </div>
       <label>Password</label>
       <input 
         type="password" 
         @blur="$v.password.$touch()"
         v-model="password"
         :class="{invalid: $v.password.$error}"
-        @keyup.enter="goToHome"
+        @keyup.enter="tryLogin"
       >
+      <div class="validations" v-if="$v.password.$error">
+        <p class="validation" v-if="!$v.password.required">
+          This ain't gonna work without a password, genius...
+        </p>
+      </div>
       <button
-        @click="goToHome"
+        @click="tryLogin"
       >
         Login
       </button>
+      <div class='auth-failed' v-if='authFailed'>
+        Something went wrong
+      </div>
     </section>
   </main>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 main {
   background-color: darkgrey;
 }
@@ -73,6 +98,7 @@ section {
 }
 
 label {
+  margin-top: 25px;
   display: block;
   margin-bottom: 8px;
   font-size: 20px;
@@ -81,7 +107,6 @@ label {
 input {
   display: block;
   font-size: 20px;
-  margin-bottom: 25px;
   padding: 5px;
   width: 250px;
 }
@@ -94,8 +119,28 @@ button {
   font-size: 18px;
   border-radius: 5px;
   padding: 12px;
-  background-color: #C4C4C4;
+  background-color: #55108B;
   width: 260px;
   margin: auto;
+  margin-top: 25px;
+  cursor: pointer;
+  opacity: 0.4;
+    &:hover {
+    opacity: 0.7;
+  }
+}
+
+.auth-failed {
+  color: red;
+  margin-top: 15px;
+}
+
+.validations, .validation {
+  margin: 0;
+  color: red;
+}
+
+.validations {
+  margin-top: 4px;
 }
 </style>

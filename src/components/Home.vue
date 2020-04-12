@@ -7,6 +7,9 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   created: function() {
+    if (localStorage.getItem('token')) {
+      this.resetToken()
+    }
     this.axios.get('http://localhost:3000/tags').then(
       response => { this.setTags(response.data) }
     )
@@ -32,7 +35,7 @@ export default {
     ManageBar
   },
   methods: {
-    ...mapActions(['setTags', 'setCards', 'setSubTags', 'filterSelectedCards'])
+    ...mapActions(['setTags', 'setCards', 'setSubTags', 'filterSelectedCards', 'resetToken'])
   }
 }
 </script>
