@@ -15,11 +15,13 @@ const getters = {
 }
 
 const mutations = {
-  setUser(state, user) {
-    state.user = user
-  },
-  setToken(state, token) {
+  logInUser(state, payload) {
+    let token = payload.token
+    state.user = payload.email
     state.token = token
+    localStorage.setItem('token', token)
+    axios.defaults.headers.common["Authorization"] =
+        "Bearer " + token;
   },
   logOut(state) {
     state.user = null
@@ -37,13 +39,7 @@ const actions = {
     await axios.post('http://localhost:3000/api/users/login', params)
     .then(
       response => {
-        let responseData = response.data.user
-        let token = responseData.token
-        commit('setUser', responseData.email)
-        commit('setToken', token)
-        localStorage.setItem('token', token)
-        axios.defaults.headers.common["Authorization"] =
-            "Bearer " + token;
+        commit('logInUser', response.data.user)
       })
     .catch(
       error => {
@@ -56,6 +52,9 @@ const actions = {
   },
   resetToken({ commit }) {
     commit('resetToken')
+  },
+  logInUser({ commit }, payload) {
+    commit('logInUser', payload)
   }
 }
 

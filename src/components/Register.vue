@@ -1,13 +1,14 @@
 <script>
 import { mapActions } from 'vuex'
-import { required, email } from 'vuelidate/lib/validators'
+import { required, email, sameAs } from 'vuelidate/lib/validators'
 
 export default {
   data () {
     return {
       email: '',
       password: '',
-      authFailed: false
+      passwordConfirmation: '',
+      registrationFailed: false
     }
   },
   validations: {
@@ -17,18 +18,26 @@ export default {
     },
     password: {
       required
+    },
+    passwordConfirmation: {
+      sameAsPassword: sameAs('password')
     }
   },
   methods: {
-    ...mapActions(['login']),
-    async tryLogin() {
+    ...mapActions(['logInUser']),
+    tryRegister() {
       if (!this.$v.$invalid) {
-        try {
-          await this.login({ user: { email: this.email, password: this.password } })
-          this.$router.push({ name: 'home' })
-        } catch (error) {
-          this.authFailed = true
+        let params = {
+          email: this.email,
+          password: this.password,
+          password_confirmation: this.passwordConfirmation
         }
+        this.axios.post('http://localhost:3000/users', params).then(
+          response => {
+            this.logInUser(response.data.user)
+            this.$router.push({ name: 'home' })
+          })
+        .catch(() => this.registrationFailed = true)
       }
     }
   }
@@ -38,9 +47,7 @@ export default {
 <template>
   <main>
     <section>
-      <h1>
-        Login
-      </h1>
+      <h1>Register</h1>
       <label>Email</label>
       <input 
         type="text" 
@@ -61,26 +68,42 @@ export default {
       <input 
         type="password" 
         @blur="$v.password.$touch()"
-        v-model="password"
+        v-model.trim="password"
         :class="{invalid: $v.password.$error}"
-        @keyup.enter="tryLogin"
+        @keyup.enter="tryRegister"
       >
       <div class="validations" v-if="$v.password.$error">
         <p class="validation" v-if="!$v.password.required">
           This ain't gonna work without a password...
         </p>
       </div>
-      <button
-        @click="tryLogin"
+      <label>Re-enter Password</label>
+      <input 
+        type="password" 
+        @blur="$v.passwordConfirmation.$touch()"
+        v-model.trim="passwordConfirmation"
+        :class="{invalid: $v.passwordConfirmation.$error}"
+        @keyup.enter="tryRegister"
       >
-        Login
+      <div class="validations" v-if="$v.passwordConfirmation.$error">
+        <p class="validation" v-if="!$v.passwordConfirmation.required">
+          This, uh... needs to be here.
+        </p>
+        <p class="validation" v-if="!$v.passwordConfirmation.required">
+          This doesn't match the password above.
+        </p>
+      </div>
+      <button
+        @click="tryRegister"
+      >
+        Sign Up
       </button>
-      <div class='auth-failed' v-if='authFailed'>
+      <div class='registration-failed' v-if='registrationFailed'>
         Something went wrong
       </div>
-      <div class="register">
-        <router-link to="/register">
-          Don't have an account yet?
+      <div class="login">
+        <router-link to="/login">
+          Already have an account?
         </router-link>
       </div>
     </section>
@@ -146,7 +169,7 @@ button {
   }
 }
 
-.auth-failed {
+.registration-failed {
   color: red;
   margin-top: 15px;
 }
@@ -160,7 +183,7 @@ button {
   margin-top: 4px;
 }
 
-.register {
+.login {
   margin-top: 4px;
   opacity: 0.4;
   &:hover {

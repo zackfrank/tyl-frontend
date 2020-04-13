@@ -12,6 +12,16 @@ const authGuard = {
   }
 }
 
+const loggedIn = {
+  beforeEnter: (to, from, next) => {
+    if (store.state.auth.token) {
+      next('/')
+    } else {
+      next()
+    }
+  }
+}
+
 const routes = [
   {
     path: '/',
@@ -23,13 +33,13 @@ const routes = [
     path: '/login',
     name: 'auth',
     component: () => import('@/components/Auth'),
-    beforeEnter: (to, from, next) => {
-    if (store.state.auth.token) {
-      next('/')
-    } else {
-      next()
-    }
-  }
+    ...loggedIn
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('@/components/Register'),
+    ...loggedIn
   }
 ]
 
