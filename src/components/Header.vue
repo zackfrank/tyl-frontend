@@ -52,13 +52,14 @@ export default {
     <h1>
       <router-link to="/">
         <span style="opacity: 0.1">#</span><span style="opacity: 0.2">tag</span><span style="opacity: 0.3">your</span><span style="opacity: 0.4">life</span>
-      </router-link to="/">
+      </router-link>
     </h1>
 
     <!-- Nav Menu -->
     <nav id="navMenu" v-if="token">
       <ul>
         <li><a @click="showManageTagsModal = true">Manage Tags</a></li>
+        <li><a>Account</a></li>
         <li><a @click="signOut">Sign Out</a></li>
       </ul>
     </nav>
