@@ -6,6 +6,7 @@ export default {
   data() {
     return {
       query: '',
+      active: true,
       archivedOnly: false,
       includeArchived: false,
       showSubtagsSection: false,
@@ -21,6 +22,14 @@ export default {
         this.query = ''
       }
     },
+    active(value) {
+      this.setShowActive(value)
+      if (value) {
+        this.setShowArchived(!value)
+        this.archivedOnly = false
+        this.includeArchived = false
+      }
+    },
     includeArchived(value) {
       this.setShowArchived(value)
       if (!value) {
@@ -31,19 +40,21 @@ export default {
       this.setShowActive(!value)
       if (value) {
         this.includeArchived = true
+        this.active = false
         this.setShowArchived(true)
       }
     },
-    showArchived(value) {
-      if (this.includeArchived !== value) {
-        this.includeArchived = value
-      }
-    },
-    showActive(value) {
-      if (this.archivedOnly === value) {
-        this.archivedOnly = !value
-      }
-    },
+    // showArchived(value) {
+    //   if (this.includeArchived !== value) {
+    //     this.includeArchived = value
+    //   }
+    // },
+    // showActive(value) {
+    //   this.active = value
+    //   if (this.archivedOnly === value) {
+    //     this.archivedOnly = !value
+    //   }
+    // },
     hiddenSubtags() {
       this.filterSelectedCards(this.unfilteredCards)
     },
@@ -167,6 +178,40 @@ export default {
         <div class="sort-sub-section">
           <div id="show-options-header">Show Options:</div>
 
+          <!-- Show/Hide Archived -->
+            <div class="sort-options">
+              <div class="radio-option">
+                <input
+                  type="radio"
+                  id="active"
+                  name="archive-options"
+                  :value="true"
+                  v-model="active"
+                >
+                <label for="active" class="radio-label">Active</label>
+              </div>
+              <div class="radio-option">
+                <input
+                  type="radio"
+                  id="active-plus-archived"
+                  name="archive-options"
+                  :value="true"
+                  v-model="includeArchived"
+                >
+                <label for="active-plus-archived" class="radio-label">Active + Archived</label>
+              </div>
+              <div class="radio-option">
+                <input
+                  type="radio"
+                  id="archived-only"
+                  name="archive-options"
+                  :value="true"
+                  v-model="archivedOnly"
+                >
+                <label for="archived-only" class="radio-label">Archived Only</label>
+              </div>
+            </div>
+
           <!-- Show/Hide Subtags -->
           <div class="sort-option-header clickable">
             <span @click="showSubtagsSection = !showSubtagsSection">
@@ -210,41 +255,7 @@ export default {
               </li>
             </ul>
           </div>
-
-          <!-- Show/Hide Archived -->
-          <div class="sort-option-header clickable">
-            <span @click="showArchivedTagsSection = !showArchivedTagsSection">
-              Archived Tags
-            </span>
-            <ToggleShowArrow
-              :show="showArchivedTagsSection"
-              @show="showArchivedTagsSection = $event"
-            />
-          </div>
-          <div v-if="showArchivedTagsSection">
-            <ul class="sort-options">
-              <li class="checkbox-option">
-                <input type="checkbox" v-model="includeArchived" class="show-options-checkbox">
-                <label
-                  class="checkbox-label"
-                  @click="includeArchived = !includeArchived"
-                >
-                  Include Archived
-                </label>
-              </li>
-              <li class="checkbox-option">
-                <input type="checkbox" v-model="archivedOnly" class="show-options-checkbox">
-                <label
-                  class="checkbox-label"
-                  @click="archivedOnly = !archivedOnly"
-                >
-                  Archived Only
-                </label>
-              </li>
-            </ul>
-          </div>
         </div>
-
       </div>
     </div>
   </section>
@@ -287,13 +298,13 @@ section {
   margin-bottom: 14px;
 }
 
-.checkbox-option {
+.checkbox-option, .radio-label {
   opacity: 0.7;
   margin-left: 4px;
   margin-bottom: 5px;
 }
 
-.checkbox-label {
+.checkbox-label, .radio-option {
   cursor: pointer;
   margin-left: 4px;
 }
