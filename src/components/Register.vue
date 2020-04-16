@@ -158,14 +158,13 @@ button {
   font-size: 18px;
   border-radius: 5px;
   padding: 12px;
-  background-color: #55108B;
+  background-color: #55108b8c;
   width: 260px;
   margin: auto;
   margin-top: 25px;
   cursor: pointer;
-  opacity: 0.4;
     &:hover {
-    opacity: 0.7;
+    background-color: #55108bb3;
   }
 }
 
