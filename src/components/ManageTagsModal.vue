@@ -81,11 +81,11 @@ export default {
       }
     },
     updateTag() {
-      this.axios.patch(`http://localhost:3000/tags/${this.selectedTag.id}`,
+      this.axios.patch(`/tags/${this.selectedTag.id}`,
         { name: this.tagName }).then(() => {
           this.clearTag()
           this.triggerTagUpdated()
-          this.axios.get('http://localhost:3000/tags').then(
+          this.axios.get('/tags').then(
             response => { this.setTags(response.data) }
           )
         }

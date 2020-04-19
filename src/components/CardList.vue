@@ -48,7 +48,7 @@ export default {
       this.setCurrentCard({})
     },
     deleteCard() {
-      this.axios.delete(`http://localhost:3000/cards/${this.currentCard.id}`).then(() => {
+      this.axios.delete(`/cards/${this.currentCard.id}`).then(() => {
         this.showCardModal = false
         this.showConfirmDeleteModal = false
         this.setCurrentCard({})
@@ -57,7 +57,7 @@ export default {
       })
     },
     getAndResetCards() {
-      this.axios.get('http://localhost:3000/cards').then(
+      this.axios.get('/cards').then(
         response => this.setCards(response.data)
       )
     }

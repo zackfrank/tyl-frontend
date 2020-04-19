@@ -10,10 +10,10 @@ export default {
     if (localStorage.getItem('token')) {
       this.resetToken()
     }
-    this.axios.get('http://localhost:3000/tags').then(
+    this.axios.get('/tags').then(
       response => { this.setTags(response.data) }
     )
-    this.axios.get('http://localhost:3000/cards').then(
+    this.axios.get('/cards').then(
       response => {
         this.setCards(response.data)
         this.filterSelectedCards(response.data)

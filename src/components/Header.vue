@@ -34,7 +34,7 @@ export default {
       this.showConfirmDeleteModal = true
     },
     deleteTag() {
-      this.axios.delete(`http://localhost:3000/tags/${this.selectedTag.id}`).then(
+      this.axios.delete(`/tags/${this.selectedTag.id}`).then(
         () => {
           this.showConfirmDeleteModal = false
           this.triggerTagDeleted()

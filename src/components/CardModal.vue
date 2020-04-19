@@ -128,7 +128,7 @@ export default {
       }
     },
     addOrRemoveTagFromCard(tag) {
-      this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
+      this.axios.patch(`/cards/${this.currentCard.id}`,
         { tag: tag }).then(() => {
           this.getAndResetCards()
           this.tagFeedback = false
@@ -151,7 +151,7 @@ export default {
     },
     createCard() {
       if (!this.currentCard.id) {
-        return this.axios.post('http://localhost:3000/cards',
+        return this.axios.post('/cards',
           {
             title: this.currentCard.title,
             description: this.currentCard.description,
@@ -160,7 +160,7 @@ export default {
         ).then(() => {
           this.triggerCardCreated()
           this.getAndResetCards()
-          this.axios.get('http://localhost:3000/tags').then(
+          this.axios.get('/tags').then(
             response => { this.setTags(response.data) }
           )
         })
@@ -191,7 +191,7 @@ export default {
           this.tagQuery = ''
         } else {
           if (this.currentCard.id) {
-            this.axios.post('http://localhost:3000/tags', { name: this.tagQuery }).then(
+            this.axios.post('/tags', { name: this.tagQuery }).then(
               response => {
                 this.addNewTag(response.data)
                 this.tagQuery = ''
@@ -221,7 +221,7 @@ export default {
           this.currentCard.description = this.description
         }
       } else if (this.description.trim() !== this.currentCard.description) {
-        this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
+        this.axios.patch(`/cards/${this.currentCard.id}`,
           { description: this.description.trim() }).then(() => {
             this.getAndResetCards()
           })
@@ -249,7 +249,7 @@ export default {
           this.currentCard.title = this.title
         }
       } else if (this.title.trim() && (this.title.trim() !== this.currentCard.title)) {
-        this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
+        this.axios.patch(`/cards/${this.currentCard.id}`,
           { title: this.title.trim() }).then(() => {
             this.getAndResetCards()
           })
@@ -258,7 +258,7 @@ export default {
       this.title = ''
     },
     toggleArchived(value) {
-      this.axios.patch(`http://localhost:3000/cards/${this.currentCard.id}`,
+      this.axios.patch(`/cards/${this.currentCard.id}`,
       { archived: value }).then(() => {
         this.getAndResetCards()
         if (value) {
@@ -269,7 +269,7 @@ export default {
       })
     },
     getAndResetCards() {
-      this.axios.get('http://localhost:3000/cards').then(
+      this.axios.get('/cards').then(
         response => this.setCards(response.data)
       )
     },

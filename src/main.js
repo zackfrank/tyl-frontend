@@ -5,7 +5,9 @@ import Vuelidate from 'vuelidate'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import store from '@/store'
- 
+
+axios.defaults.baseURL = process.env.VUE_APP_BASE_URL
+
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
 

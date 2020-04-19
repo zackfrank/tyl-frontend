@@ -32,7 +32,7 @@ export default {
           password: this.password,
           password_confirmation: this.passwordConfirmation
         }
-        this.axios.post('http://localhost:3000/users', params).then(
+        this.axios.post('/users', params).then(
           response => {
             this.logInUser(response.data.user)
             this.$router.push({ name: 'home' })

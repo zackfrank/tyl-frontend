@@ -36,7 +36,7 @@ const mutations = {
 
 const actions = {
   async login({ commit }, params) {
-    await axios.post('http://localhost:3000/api/users/login', params)
+    await axios.post('/api/users/login', params)
     .then(
       response => {
         commit('logInUser', response.data.user)
