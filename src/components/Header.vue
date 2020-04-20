@@ -59,7 +59,8 @@ export default {
     <nav id="navMenu" v-if="token">
       <ul>
         <li><a @click="showManageTagsModal = true">Manage Tags</a></li>
-        <li><a>Account</a></li>
+        <li><a>Profile</a></li>
+        <li><a>About</a></li>
         <li><a @click="signOut">Sign Out</a></li>
       </ul>
     </nav>
