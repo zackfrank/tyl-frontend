@@ -223,12 +223,14 @@ const actions = {
   },
   setSearchResults({ commit, dispatch, state }, cardSearchQuery) {
     commit('setCardSearchQuery', cardSearchQuery)
+    let lowerCaseQuery = state.cardSearchQuery.toLowerCase()
     let searchResults = state.cards.filter(card =>
-      card.title.toLowerCase().includes(state.cardSearchQuery.toLowerCase()) ||
+      card.title.toLowerCase().includes(lowerCaseQuery) ||
       (
         card.description &&
-        card.description.toLowerCase().includes(state.cardSearchQuery.toLowerCase())
-      )
+        card.description.toLowerCase().includes(lowerCaseQuery)
+      ) ||
+      card.tags.map(tag => tag.name.toLowerCase()).includes(lowerCaseQuery)
     )
     commit('setSearchResults', searchResults)
     dispatch('filterSelectedCards', searchResults)
